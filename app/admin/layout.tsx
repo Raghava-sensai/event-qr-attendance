@@ -22,6 +22,10 @@ export default async function AdminLayout({
 
   const isAdmin = profile?.role === 'admin'
 
+  if (!isAdmin) {
+    redirect('/dashboard')
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar isAdmin={isAdmin} />

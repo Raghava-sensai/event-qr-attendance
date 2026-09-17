@@ -4,9 +4,9 @@ import Link from 'next/link'
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; next?: string }>
+  searchParams: Promise<{ error?: string; message?: string; next?: string }>
 }) {
-  const { error, next } = await searchParams
+  const { error, message, next } = await searchParams
   const nextUrl = next || '/dashboard'
 
   return (
@@ -28,6 +28,12 @@ export default async function LoginPage({
           {error && (
             <div className="rounded-md bg-red-50 p-4 text-sm text-red-700">
               {error}
+            </div>
+          )}
+
+          {message && (
+            <div className="rounded-md bg-green-50 p-4 text-sm text-green-700">
+              {message}
             </div>
           )}
 
@@ -55,6 +61,14 @@ export default async function LoginPage({
                 className="relative block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 px-3"
                 placeholder="Password"
               />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="text-sm">
+              <Link href={`/forgot-password?next=${encodeURIComponent(nextUrl)}`} className="font-medium text-blue-600 hover:text-blue-500">
+                Forgot your password?
+              </Link>
             </div>
           </div>
 

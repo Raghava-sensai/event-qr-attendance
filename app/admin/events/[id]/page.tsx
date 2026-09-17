@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { ChevronLeft, Calendar, Download } from 'lucide-react'
 import { QRCodeDisplay } from '@/components/QRCodeDisplay'
+import DownloadQRButton from '@/components/DownloadQRButton'
 import { notFound } from 'next/navigation'
 
 export default async function EventDetailsPage({
@@ -63,11 +64,7 @@ export default async function EventDetailsPage({
             >
               Hide QR
             </Link>
-            {/* Real download logic would require a client component, but this is a placeholder */}
-            <button className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 inline-flex items-center">
-              <Download className="mr-2 h-4 w-4" />
-              Download QR
-            </button>
+            <DownloadQRButton eventName={event.title} />
           </div>
         </div>
       ) : (

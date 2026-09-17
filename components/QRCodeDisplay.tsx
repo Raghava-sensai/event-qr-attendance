@@ -10,7 +10,7 @@ export function QRCodeDisplay({ url }: { url: string }) {
         size={256}
         level="H"
         includeMargin={true}
-        className="mx-auto"
+        className="qr-code-svg mx-auto"
       />
     </div>
   )
