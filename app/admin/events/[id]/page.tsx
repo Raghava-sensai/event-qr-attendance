@@ -53,7 +53,7 @@ export default async function EventDetailsPage({
       {showQr ? (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden text-center py-12 px-6">
           <h2 className="text-3xl font-bold text-gray-900 mb-2">{event.title}</h2>
-          <p className="text-gray-500 mb-8">{attendances?.length || 0} Attendees so far</p>
+          <p className="text-gray-500 mb-8">{attendances?.length || 0} Participants so far</p>
           
           <QRCodeDisplay url={eventUrl} />
           
@@ -95,7 +95,7 @@ export default async function EventDetailsPage({
 
           <div className="px-6 py-6">
             <h3 className="text-lg font-medium leading-6 text-gray-900 mb-4">
-              Attendance ({attendances?.length || 0})
+              Event Participation ({attendances?.length || 0})
             </h3>
             
             <div className="mt-4 flow-root">
@@ -128,7 +128,7 @@ export default async function EventDetailsPage({
                       {(!attendances || attendances.length === 0) && (
                         <tr>
                           <td colSpan={2} className="py-8 text-center text-sm text-gray-500">
-                            No one has scanned the QR code yet.
+                            No one has checked in yet.
                           </td>
                         </tr>
                       )}

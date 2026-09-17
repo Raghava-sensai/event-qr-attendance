@@ -8,9 +8,9 @@ export default function HomePage() {
         <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
             <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
-              <span className="sr-only">QR Attendance</span>
+              <span className="sr-only">Club Event Platform</span>
               <QrCode className="h-8 w-8 text-blue-600" />
-              <span className="font-bold text-xl tracking-tight text-gray-900">QR Attendance</span>
+              <span className="font-bold text-xl tracking-tight text-gray-900">Club Event Platform</span>
             </Link>
           </div>
           <div className="flex flex-1 justify-end items-center gap-6">
@@ -32,10 +32,10 @@ export default function HomePage() {
         <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              Seamless Event Attendance
+              University Club Event Platform
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              Modernize your events with lightning-fast QR code scanning. Secure, reliable, and perfectly designed for organizations that demand simplicity and scale.
+              Modernize your student club with lightning-fast QR code check-ins. Track event participation, engage members, and automatically build progress towards club milestones and badges.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link
@@ -78,7 +78,7 @@ export default function HomePage() {
                   Instant Check-ins
                 </dt>
                 <dd className="mt-2 text-base leading-7 text-gray-600">
-                  Attendees just point their camera. No apps to download. Immediate verification straight from their browser.
+                  Participants just point their camera. No apps to download. Immediate check-in straight from their browser.
                 </dd>
               </div>
               <div className="relative pl-16">
@@ -89,7 +89,7 @@ export default function HomePage() {
                   Duplicate Protection
                 </dt>
                 <dd className="mt-2 text-base leading-7 text-gray-600">
-                  Strict database constraints ensure that an attendee can only be checked in exactly once per event.
+                  Strict database constraints ensure that a student can only be checked in exactly once per event.
                 </dd>
               </div>
               <div className="relative pl-16">
@@ -97,10 +97,10 @@ export default function HomePage() {
                   <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600">
                     <CheckCircle2 className="h-6 w-6 text-white" aria-hidden="true" />
                   </div>
-                  Real-time Dashboard
+                  Track Participation
                 </dt>
                 <dd className="mt-2 text-base leading-7 text-gray-600">
-                  Watch your attendance numbers climb in real time with our powerful admin suite. Export the data whenever you need.
+                  Watch your event participation numbers climb in real time with our powerful admin suite. Monitor student engagement easily.
                 </dd>
               </div>
             </dl>

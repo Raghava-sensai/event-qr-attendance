@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { CheckCircle, AlertCircle, Info, Calendar } from 'lucide-react'
+import { CheckCircle, AlertCircle, Info, Calendar, Trophy } from 'lucide-react'
 import Link from 'next/link'
+import { getProgressStats, MILESTONES } from '@/lib/constants/milestones'
 
 export default async function EventScanPage({
   params
@@ -38,7 +39,7 @@ export default async function EventScanPage({
         <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg text-center">
           <Info className="mx-auto h-12 w-12 text-yellow-500 mb-4" />
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Event Not Active</h2>
-          <p className="text-gray-600 mb-6">This event is currently marked as {event.status}. Attendance is not being accepted at this time.</p>
+          <p className="text-gray-600 mb-6">This event is currently marked as {event.status}. Check-ins are not being accepted at this time.</p>
           <Link href="/dashboard" className="text-blue-600 hover:underline">Go to Dashboard</Link>
         </div>
       </div>
@@ -91,21 +92,45 @@ export default async function EventScanPage({
     }
   }
 
+  // 5. Check for milestone unlock if successful
+  let unlockedMilestone = null
+  if (status === 'success') {
+    const { count } = await supabase
+      .from('attendances')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', user.id)
+    
+    if (count) {
+      unlockedMilestone = MILESTONES.find(m => m.requiredEvents === count)
+    }
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg text-center">
         {status === 'success' && (
           <>
             <CheckCircle className="mx-auto h-16 w-16 text-green-500 mb-4" />
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">✓ Attendance Completed</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">✓ Check-in Complete</h2>
+            
+            {unlockedMilestone && (
+              <div className="mt-6 mb-2 bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-200 rounded-xl p-4 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <div className="flex justify-center mb-2">
+                  <span className="text-4xl animate-bounce">{unlockedMilestone.icon}</span>
+                </div>
+                <h3 className="text-lg font-bold text-yellow-800">Milestone Unlocked!</h3>
+                <p className="font-semibold text-yellow-900 text-xl my-1">{unlockedMilestone.name}</p>
+                <p className="text-sm text-yellow-700">{unlockedMilestone.description}</p>
+              </div>
+            )}
           </>
         )}
         
         {status === 'duplicate' && (
           <>
             <CheckCircle className="mx-auto h-16 w-16 text-blue-500 mb-4" />
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Already Completed</h2>
-            <p className="text-gray-500 mb-2">You have already marked attendance for this event.</p>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Already Checked In</h2>
+            <p className="text-gray-500 mb-2">You have already recorded your participation for this event.</p>
           </>
         )}
 
@@ -113,7 +138,7 @@ export default async function EventScanPage({
           <>
             <AlertCircle className="mx-auto h-16 w-16 text-red-500 mb-4" />
             <h2 className="text-2xl font-bold text-gray-900 mb-2">An Error Occurred</h2>
-            <p className="text-gray-500 mb-2">We could not mark your attendance. Please try again.</p>
+            <p className="text-gray-500 mb-2">We could not record your participation. Please try again.</p>
           </>
         )}
 
