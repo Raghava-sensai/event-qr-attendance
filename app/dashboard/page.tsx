@@ -1,14 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
-import { Calendar, CheckCircle, QrCode, Trophy, Target } from 'lucide-react'
+import { Calendar, CheckCircle, QrCode, Trophy, Target, Award } from 'lucide-react'
 import Link from 'next/link'
-import { getProgressStats } from '@/lib/constants/milestones'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    return null // Layout handles redirect
+    return null
   }
 
   // Get user's profile
@@ -21,16 +20,12 @@ export default async function DashboardPage() {
   // Get all active and upcoming events
   const { data: allEvents, error: eventsError } = await supabase
     .from('events')
-    .select('id, title, description, event_date, status')
+    .select('id, title, description, event_date, status, category')
     .in('status', ['active', 'upcoming'])
     .order('event_date', { ascending: true })
 
-  if (eventsError) {
-    console.error('Error fetching events:', eventsError)
-  }
-
   // Get participated events
-  const { data: attendances, error: attendancesError } = await supabase
+  const { data: attendances } = await supabase
     .from('attendances')
     .select(`
       id,
@@ -41,22 +36,74 @@ export default async function DashboardPage() {
         title,
         description,
         event_date,
-        status
+        status,
+        category
       )
     `)
     .eq('user_id', user.id)
     .order('scanned_at', { ascending: false })
 
-  if (attendancesError) {
-    console.error('Error fetching attendances:', attendancesError)
-  }
+  // Get missions
+  const { data: missions } = await supabase
+    .from('missions')
+    .select('*')
+    .order('created_at', { ascending: true })
 
-  // Filter available events (events the user hasn't participated in yet)
+  // Filter available events
   const participatedEventIds = new Set(attendances?.map(a => a.event_id) || [])
   const availableEvents = allEvents?.filter(e => !participatedEventIds.has(e.id)) || []
 
-  const participationCount = attendances?.length || 0
-  const stats = getProgressStats(participationCount)
+  // Calculate mission progress
+  const userCategoryCounts: Record<string, number> = {}
+  let totalEvents = 0
+  
+  if (attendances) {
+    attendances.forEach(a => {
+      totalEvents++
+      // @ts-expect-error Types from Supabase join need casting
+      const category = a.events?.category || 'General'
+      userCategoryCounts[category] = (userCategoryCounts[category] || 0) + 1
+    })
+  }
+
+  type MissionProgress = {
+    id: string
+    name: string
+    description: string
+    target_category: string
+    required_count: number
+    badge_name: string
+    badge_icon: string
+    currentProgress: number
+    percentage: number
+  }
+
+  const activeMissions: MissionProgress[] = []
+  const completedMissions: MissionProgress[] = []
+
+  if (missions) {
+    missions.forEach(mission => {
+      let progress = 0
+      if (mission.target_category === 'All') {
+        progress = totalEvents
+      } else {
+        progress = userCategoryCounts[mission.target_category] || 0
+      }
+
+      const isCompleted = progress >= mission.required_count
+      const missionData = {
+        ...mission,
+        currentProgress: Math.min(progress, mission.required_count),
+        percentage: Math.min(100, (progress / mission.required_count) * 100)
+      }
+
+      if (isCompleted) {
+        completedMissions.push(missionData)
+      } else {
+        activeMissions.push(missionData)
+      }
+    })
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
@@ -64,7 +111,7 @@ export default async function DashboardPage() {
         <div>
           <h1 className="text-2xl font-semibold leading-6 text-gray-900">Welcome, {profile?.username || 'Student'}!</h1>
           <p className="mt-2 text-sm text-gray-700">
-            Check in to events and track your club participation.
+            Check in to events and complete missions to earn badges.
           </p>
         </div>
         <Link 
@@ -76,55 +123,64 @@ export default async function DashboardPage() {
         </Link>
       </div>
 
-      {/* Progress Bar Section */}
+      {/* Badges Section */}
+      {completedMissions.length > 0 && (
+        <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 overflow-hidden">
+          <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2 mb-4">
+            <Award className="h-5 w-5 text-yellow-500" />
+            My Badges
+          </h2>
+          <div className="flex flex-wrap gap-4">
+            {completedMissions.map(mission => (
+              <div key={mission.id} className="flex items-center gap-3 bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-200 px-4 py-3 rounded-lg shadow-sm">
+                <span className="text-3xl">{mission.badge_icon}</span>
+                <div>
+                  <div className="font-bold text-yellow-900 text-sm">{mission.badge_name}</div>
+                  <div className="text-xs text-yellow-700">{mission.name}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Active Missions Section */}
       <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 overflow-hidden relative">
         <div className="absolute top-0 right-0 p-32 bg-blue-50 rounded-full opacity-20 -mr-20 -mt-20 pointer-events-none"></div>
         <div className="relative">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-              <Trophy className="h-5 w-5 text-yellow-500" />
-              Club Participation
-            </h2>
-            <div className="text-sm font-medium text-gray-500">
-              {participationCount} {stats.nextMilestone ? `/ ${stats.nextMilestone.requiredEvents}` : ''} events participated
-            </div>
-          </div>
+          <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2 mb-6">
+            <Target className="h-5 w-5 text-blue-500" />
+            Active Missions
+          </h2>
           
-          <div className="w-full bg-gray-100 rounded-full h-3 mb-4 overflow-hidden">
-            <div 
-              className="bg-blue-600 h-3 rounded-full transition-all duration-1000 ease-out" 
-              style={{ width: `${stats.progressPercentage}%` }}
-            ></div>
-          </div>
-          
-          <div className="flex justify-between items-start sm:items-center flex-col sm:flex-row gap-4">
-            <div className="flex items-center gap-2">
-              {stats.currentMilestone ? (
-                <>
-                  <span className="text-2xl">{stats.currentMilestone.icon}</span>
-                  <div>
-                    <div className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Current Level</div>
-                    <div className="font-bold text-gray-900">{stats.currentMilestone.name}</div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {activeMissions.length > 0 ? (
+              activeMissions.map(mission => (
+                <div key={mission.id} className="bg-gray-50 border border-gray-100 rounded-lg p-4">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-bold text-gray-900">{mission.name}</h3>
+                    <span className="text-2xl" title={`Reward: ${mission.badge_name}`}>{mission.badge_icon}</span>
                   </div>
-                </>
-              ) : (
-                <div className="text-sm text-gray-500 italic">Attend your first event to unlock a badge!</div>
-              )}
-            </div>
-            
-            {stats.nextMilestone && (
-              <div className="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-lg border border-gray-100">
-                <Target className="h-4 w-4 text-gray-400" />
-                <div className="text-right">
-                  <div className="text-xs text-gray-500">Next milestone</div>
-                  <div className="font-semibold text-gray-900 text-sm">
-                    {stats.nextMilestone.icon} {stats.nextMilestone.name}
+                  <p className="text-xs text-gray-500 mb-4 h-8 line-clamp-2">{mission.description}</p>
+                  
+                  <div className="flex justify-between items-center text-xs font-medium text-gray-500 mb-1">
+                    <span>{mission.currentProgress} / {mission.required_count} Events</span>
+                    <span>{Math.round(mission.percentage)}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                    <div 
+                      className="bg-blue-600 h-2 rounded-full transition-all duration-1000 ease-out" 
+                      style={{ width: `${mission.percentage}%` }}
+                    ></div>
+                  </div>
+                  <div className="mt-3 inline-block px-2 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded">
+                    Category: {mission.target_category}
                   </div>
                 </div>
-                <div className="ml-2 pl-3 border-l border-gray-200">
-                  <div className="font-bold text-blue-600">{stats.eventsToNext}</div>
-                  <div className="text-xs text-gray-500">more</div>
-                </div>
+              ))
+            ) : (
+              <div className="col-span-full py-8 text-center text-gray-500 italic">
+                {missions && missions.length > 0 ? "You've completed all active missions!" : "No missions available right now."}
               </div>
             )}
           </div>
@@ -152,6 +208,9 @@ export default async function DashboardPage() {
                           event.status === 'active' ? 'bg-green-50 text-green-700 ring-green-600/20' : 'bg-blue-50 text-blue-700 ring-blue-600/20'
                         }`}>
                           {event.status.toUpperCase()}
+                        </span>
+                        <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+                          {event.category}
                         </span>
                       </div>
                       <div className="mt-2 flex items-center text-sm text-gray-500">
@@ -199,6 +258,10 @@ export default async function DashboardPage() {
                           {/* @ts-expect-error Types from Supabase join need casting */}
                           {attendance.events?.title}
                         </h3>
+                        <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+                          {/* @ts-expect-error Types from Supabase join need casting */}
+                          {attendance.events?.category}
+                        </span>
                       </div>
                       <div className="mt-2 sm:flex sm:items-center gap-4">
                         <div className="flex items-center text-sm text-gray-500">
@@ -209,9 +272,6 @@ export default async function DashboardPage() {
                         <div className="mt-2 sm:mt-0 flex items-center text-sm text-gray-500">
                           Checked in: {new Date(attendance.scanned_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </div>
-                        <span className="mt-2 sm:mt-0 inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                          ✓ Participated
-                        </span>
                       </div>
                     </div>
                   </div>

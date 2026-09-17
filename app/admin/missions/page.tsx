@@ -1,0 +1,73 @@
+import { createClient } from '@/lib/supabase/server'
+import Link from 'next/link'
+import { Plus, Target, Trophy, Filter } from 'lucide-react'
+
+export default async function AdminMissions() {
+  const supabase = await createClient()
+
+  const { data: missions, error } = await supabase
+    .from('missions')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="sm:flex sm:items-center">
+        <div className="sm:flex-auto">
+          <h1 className="text-2xl font-semibold leading-6 text-gray-900">Missions & Badges</h1>
+          <p className="mt-2 text-sm text-gray-700">
+            Define gamification milestones for your students based on event categories.
+          </p>
+        </div>
+        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+          <Link
+            href="/admin/missions/new"
+            className="block rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            <span className="flex items-center">
+              <Plus className="mr-1 h-4 w-4" />
+              Create Mission
+            </span>
+          </Link>
+        </div>
+      </div>
+
+      <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {missions?.map((mission) => (
+          <div key={mission.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+            <div className="p-6 flex-1">
+              <div className="flex justify-between items-start mb-4">
+                <div className="text-4xl bg-gray-50 p-3 rounded-full border border-gray-100">{mission.badge_icon}</div>
+                <span className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">
+                  {mission.target_category}
+                </span>
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-1">{mission.name}</h3>
+              <p className="text-sm text-gray-500 mb-4 h-10 line-clamp-2">{mission.description}</p>
+              
+              <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 flex items-center justify-between">
+                <div className="flex items-center text-sm text-gray-700 font-medium">
+                  <Target className="mr-2 h-4 w-4 text-blue-500" />
+                  Requires
+                </div>
+                <div className="text-sm font-bold text-gray-900">{mission.required_count} Events</div>
+              </div>
+            </div>
+            <div className="bg-gray-50 px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+              <div className="text-sm text-gray-500 flex items-center">
+                <Trophy className="mr-1.5 h-4 w-4 text-yellow-500" />
+                {mission.badge_name}
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {(!missions || missions.length === 0) && (
+          <div className="col-span-full py-12 text-center text-gray-500 bg-white rounded-xl border border-dashed border-gray-300">
+            No missions created yet. Gamify your club by adding one!
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}

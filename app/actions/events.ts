@@ -18,6 +18,7 @@ export async function createEvent(formData: FormData) {
   const dateStr = formData.get('date') as string
   const timeStr = formData.get('time') as string
   const status = formData.get('status') as string || 'upcoming'
+  const category = formData.get('category') as string || 'General'
 
   // Combine date and time into a single timestamp
   const eventDate = new Date(`${dateStr}T${timeStr}:00`).toISOString()
@@ -29,7 +30,8 @@ export async function createEvent(formData: FormData) {
       description,
       event_date: eventDate,
       created_by: user.id,
-      status
+      status,
+      category
     })
     .select('id')
     .single()

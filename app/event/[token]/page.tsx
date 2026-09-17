@@ -2,7 +2,6 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { CheckCircle, AlertCircle, Info, Calendar, Trophy } from 'lucide-react'
 import Link from 'next/link'
-import { getProgressStats, MILESTONES } from '@/lib/constants/milestones'
 
 export default async function EventScanPage({
   params
@@ -92,16 +91,38 @@ export default async function EventScanPage({
     }
   }
 
-  // 5. Check for milestone unlock if successful
+  // 5. Check for mission unlock if successful
   let unlockedMilestone = null
   if (status === 'success') {
-    const { count } = await supabase
+    // 1. Get all attendances to count categories
+    const { data: allAttendances } = await supabase
       .from('attendances')
-      .select('*', { count: 'exact', head: true })
+      .select(`
+        events (category)
+      `)
       .eq('user_id', user.id)
-    
-    if (count) {
-      unlockedMilestone = MILESTONES.find(m => m.requiredEvents === count)
+
+    let totalEvents = 0
+    const categoryCounts: Record<string, number> = {}
+
+    if (allAttendances) {
+      allAttendances.forEach(a => {
+        totalEvents++
+        // @ts-expect-error join cast
+        const category = a.events?.category || 'General'
+        categoryCounts[category] = (categoryCounts[category] || 0) + 1
+      })
+    }
+
+    // 2. Get all missions
+    const { data: missions } = await supabase.from('missions').select('*')
+
+    // 3. Find if any mission was JUST completed (its required count exactly matches the current count)
+    if (missions) {
+      unlockedMilestone = missions.find(mission => {
+        const count = mission.target_category === 'All' ? totalEvents : (categoryCounts[mission.target_category] || 0)
+        return count === mission.required_count
+      })
     }
   }
 
@@ -116,10 +137,10 @@ export default async function EventScanPage({
             {unlockedMilestone && (
               <div className="mt-6 mb-2 bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-200 rounded-xl p-4 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
                 <div className="flex justify-center mb-2">
-                  <span className="text-4xl animate-bounce">{unlockedMilestone.icon}</span>
+                  <span className="text-4xl animate-bounce">{unlockedMilestone.badge_icon}</span>
                 </div>
-                <h3 className="text-lg font-bold text-yellow-800">Milestone Unlocked!</h3>
-                <p className="font-semibold text-yellow-900 text-xl my-1">{unlockedMilestone.name}</p>
+                <h3 className="text-lg font-bold text-yellow-800">Mission Accomplished!</h3>
+                <p className="font-semibold text-yellow-900 text-xl my-1">{unlockedMilestone.badge_name}</p>
                 <p className="text-sm text-yellow-700">{unlockedMilestone.description}</p>
               </div>
             )}

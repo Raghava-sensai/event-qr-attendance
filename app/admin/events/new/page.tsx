@@ -75,18 +75,37 @@ export default function NewEventPage() {
               </div>
             </div>
             
-            <div>
-              <label htmlFor="status" className="block text-sm font-medium leading-6 text-gray-900">Initial Status</label>
-              <div className="mt-2">
-                <select
-                  id="status"
-                  name="status"
-                  className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                >
-                  <option value="upcoming">Upcoming</option>
-                  <option value="active">Active</option>
-                  <option value="ended">Ended</option>
-                </select>
+            <div className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2">
+              <div>
+                <label htmlFor="category" className="block text-sm font-medium leading-6 text-gray-900">Category</label>
+                <div className="mt-2">
+                  <select
+                    id="category"
+                    name="category"
+                    className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                  >
+                    <option value="General">General</option>
+                    <option value="Photography">Photography</option>
+                    <option value="Technical">Technical</option>
+                    <option value="Social">Social</option>
+                    <option value="Workshop">Workshop</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="status" className="block text-sm font-medium leading-6 text-gray-900">Initial Status</label>
+                <div className="mt-2">
+                  <select
+                    id="status"
+                    name="status"
+                    className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                  >
+                    <option value="upcoming">Upcoming</option>
+                    <option value="active">Active</option>
+                    <option value="ended">Ended</option>
+                  </select>
+                </div>
               </div>
             </div>
 
