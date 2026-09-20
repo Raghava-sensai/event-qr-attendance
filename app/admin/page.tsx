@@ -23,22 +23,22 @@ export default async function AdminDashboard() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest mb-1 uppercase">SAGA × AURELIA</div>
-          <h1 className="text-2xl font-extrabold leading-6 text-[#3B2D4A]">Attendance Admin</h1>
-          <p className="mt-2 text-sm text-[#827893]">
+          <div className="text-[10px] font-bold text-[#D49A89] tracking-widest mb-1 uppercase">SAGA × AURELIA</div>
+          <h1 className="text-2xl font-extrabold leading-6 text-[#7A6A64]">Attendance Admin</h1>
+          <p className="mt-2 text-sm text-[#A39189]">
             A list of all events and their attendance statistics.
           </p>
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none flex gap-3">
           <Link
             href="/admin/missions"
-            className="block rounded-2xl bg-white px-4 py-2 text-center text-sm font-bold text-[#3B2D4A] shadow-sm ring-1 ring-inset ring-gray-100 hover:bg-gray-50"
+            className="block rounded-2xl bg-white px-4 py-2 text-center text-sm font-bold text-[#7A6A64] shadow-sm ring-1 ring-inset ring-[#F2E8DF] hover:bg-[#FFF9F5]"
           >
             Manage Missions
           </Link>
           <Link
             href="/admin/events/new"
-            className="block rounded-2xl bg-[#EFCAFA] px-4 py-2 text-center text-sm font-bold text-[#3B2D4A] shadow-sm hover:bg-[#E5B5F5]"
+            className="block rounded-2xl bg-[#FFE5D9] px-4 py-2 text-center text-sm font-bold text-[#D49A89] shadow-sm hover:bg-[#FFD1C1]"
           >
             <span className="flex items-center">
               <Plus className="mr-1 h-4 w-4" />

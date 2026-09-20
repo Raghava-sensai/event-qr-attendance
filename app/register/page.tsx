@@ -16,11 +16,11 @@ export default async function RegisterPage({
     <div className="flex min-h-screen items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8 rounded-[2rem] bg-white p-8 shadow-sm border border-gray-100">
         <div className="text-center">
-          <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest mb-1 uppercase">SAGA × AURELIA</div>
-          <h2 className="text-3xl font-extrabold tracking-tight text-[#3B2D4A]">Create Account</h2>
-          <p className="mt-2 text-sm text-[#827893]">
+          <div className="text-[10px] font-bold text-[#D49A89] tracking-widest mb-1 uppercase">SAGA × AURELIA</div>
+          <h2 className="text-3xl font-extrabold tracking-tight text-[#7A6A64]">Create Account</h2>
+          <p className="mt-2 text-sm text-[#A39189]">
             Or{' '}
-            <Link href={`/login?next=${encodeURIComponent(nextUrl)}`} className="font-medium text-[#9D63D0] hover:text-purple-600">
+            <Link href={`/login?next=${encodeURIComponent(nextUrl)}`} className="font-medium text-[#D49A89] hover:text-[#B58273]">
               sign in to your existing account
             </Link>
           </p>
