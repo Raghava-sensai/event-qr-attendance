@@ -10,13 +10,26 @@ export async function login(formData: FormData) {
   const password = formData.get('password') as string
   const nextUrl = formData.get('next') as string || '/dashboard'
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   })
 
   if (error) {
     return redirect(`/login?error=${encodeURIComponent(error.message)}&next=${encodeURIComponent(nextUrl)}`)
+  }
+
+  // Ensure profile exists (in case they were missing from database)
+  if (data.user) {
+    const { data: profile } = await supabase.from('profiles').select('id').eq('id', data.user.id).single()
+    if (!profile) {
+      await supabase.from('profiles').insert({
+        id: data.user.id,
+        username: email.split('@')[0],
+        avatar: '🦊',
+        role: 'user'
+      })
+    }
   }
 
   redirect(nextUrl)
@@ -31,18 +44,28 @@ export async function register(formData: FormData) {
   const avatar = formData.get('avatar') as string || '🦊'
   const nextUrl = formData.get('next') as string || '/dashboard'
 
-  const { data, error } = await supabase.auth.signUp({
+  let { data, error } = await supabase.auth.signUp({
     email,
     password,
   })
+
+  // If user already exists, let's just log them in seamlessly!
+  if (error && error.message.includes('User already registered')) {
+    const loginRes = await supabase.auth.signInWithPassword({ email, password })
+    if (loginRes.error) {
+      return redirect(`/register?error=${encodeURIComponent(loginRes.error.message)}&next=${encodeURIComponent(nextUrl)}`)
+    }
+    data = loginRes.data
+    error = null
+  }
 
   if (error) {
     return redirect(`/register?error=${encodeURIComponent(error.message)}&next=${encodeURIComponent(nextUrl)}`)
   }
 
-  // Ensure profile is created with avatar
+  // Ensure profile is created or updated with new avatar
   if (data.user) {
-    await supabase.from('profiles').insert({
+    await supabase.from('profiles').upsert({
       id: data.user.id,
       username,
       avatar,

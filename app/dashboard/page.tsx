@@ -21,6 +21,12 @@ export default async function DashboardPage() {
     .eq('id', user.id)
     .single()
 
+  if (!profile) {
+    const { logout } = await import('@/app/actions/auth')
+    await logout()
+    return null
+  }
+
   const initials = profile?.username?.substring(0, 2).toUpperCase() || 'AQ'
 
   // Fetch all events to generate the timeline
