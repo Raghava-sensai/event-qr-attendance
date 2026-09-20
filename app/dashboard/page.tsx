@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Camera, RefreshCw, Home, Gift, Sparkles, QrCode } from 'lucide-react'
+import { LiveClock } from '@/components/LiveClock'
 
 // Dashboard dynamically generates stages from events
 
@@ -45,8 +46,11 @@ export default async function DashboardPage() {
         {/* Header Section */}
         <div className="flex justify-between items-start mb-8">
           <div>
-            <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest mb-1 uppercase">
-              SAGA × AURELIA
+            <div className="flex items-center gap-3 mb-1">
+              <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest uppercase">
+                SAGA × AURELIA
+              </div>
+              <LiveClock />
             </div>
             <h1 className="text-2xl font-extrabold text-[#3B2D4A] tracking-tight leading-tight">
               Welcome to Aurelia Fest!
