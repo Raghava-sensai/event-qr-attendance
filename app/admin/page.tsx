@@ -89,14 +89,26 @@ export default async function AdminDashboard() {
                 {event.attendances[0]?.count || 0} attendees
               </div>
             </div>
-            <div className="bg-[#F9F8FF] px-6 py-4 flex gap-4 border-t border-[#EBE0F8]">
-              <Link href={`/admin/events/${event.id}`} className="text-sm font-medium text-[#9D63D0] hover:text-[#9D63D0]">
-                View Details
-              </Link>
-              <Link href={`/admin/events/${event.id}?qr=true`} className="text-sm font-medium text-[#827893] hover:text-[#3B2D4A] flex items-center">
-                <QrCode className="mr-1 h-4 w-4" />
-                QR
-              </Link>
+            <div className="bg-[#F9F8FF] px-6 py-4 flex justify-between items-center border-t border-[#EBE0F8]">
+              <div className="flex gap-4">
+                <Link href={`/admin/events/${event.id}`} className="text-sm font-medium text-[#9D63D0] hover:text-[#9D63D0]">
+                  View Details
+                </Link>
+                <Link href={`/admin/events/${event.id}?qr=true`} className="text-sm font-medium text-[#827893] hover:text-[#3B2D4A] flex items-center">
+                  <QrCode className="mr-1 h-4 w-4" />
+                  QR
+                </Link>
+              </div>
+              <form action={async (formData) => {
+                'use server'
+                const { deleteEvent } = await import('@/app/actions/events')
+                await deleteEvent(formData)
+              }}>
+                <input type="hidden" name="id" value={event.id} />
+                <button type="submit" className="text-sm font-medium text-red-500 hover:text-red-700">
+                  Delete
+                </button>
+              </form>
             </div>
           </div>
         ))}

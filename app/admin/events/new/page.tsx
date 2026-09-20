@@ -103,47 +103,30 @@ export default function NewEventPage() {
               </div>
             </div>
             
-            <div className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2">
               <div>
                 <label htmlFor="category" className="block text-sm font-medium leading-6 text-[#3B2D4A]">Category</label>
                 <div className="mt-2">
-                  <select
-                    id="category"
-                    name="category"
-                    className="block w-full rounded-2xl border-0 py-1.5 px-3 text-[#3B2D4A] shadow-sm ring-1 ring-inset ring-[#EBE0F8] focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6"
-                  >
+                  <select name="category" id="category" className="block w-full rounded-2xl border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-[#EBE0F8] focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6">
                     <option value="General">General</option>
-                    <option value="Photography">Photography</option>
-                    <option value="Technical">Technical</option>
-                    <option value="Social">Social</option>
                     <option value="Workshop">Workshop</option>
+                    <option value="Networking">Networking</option>
+                    <option value="Main Event">Main Event</option>
                   </select>
                 </div>
               </div>
 
-            <div>
-              <label htmlFor="xp_value" className="block text-sm font-medium leading-6 text-[#3B2D4A]">
-                XP Value (Aura Points)
-              </label>
-              <div className="mt-2">
-                <input
-                  type="number"
-                  name="xp_value"
-                  id="xp_value"
-                  defaultValue="5"
-                  className="block w-full rounded-2xl border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#EBE0F8] placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
               <div>
+                <label htmlFor="xp_value" className="block text-sm font-medium leading-6 text-[#3B2D4A]">XP Value</label>
+                <div className="mt-2">
+                  <input type="number" name="xp_value" id="xp_value" defaultValue="5" className="block w-full rounded-2xl border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#EBE0F8] focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6" />
+                </div>
+              </div>
+
+              <div className="sm:col-span-2">
                 <label htmlFor="status" className="block text-sm font-medium leading-6 text-[#3B2D4A]">Initial Status</label>
                 <div className="mt-2">
-                  <select
-                    id="status"
-                    name="status"
-                    className="block w-full rounded-2xl border-0 py-1.5 px-3 text-[#3B2D4A] shadow-sm ring-1 ring-inset ring-[#EBE0F8] focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6"
-                  >
+                  <select name="status" id="status" className="block w-full rounded-2xl border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-[#EBE0F8] focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6">
                     <option value="upcoming">Upcoming</option>
                     <option value="active">Active</option>
                     <option value="ended">Ended</option>

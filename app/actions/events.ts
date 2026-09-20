@@ -79,12 +79,22 @@ export async function updateEvent(formData: FormData) {
 }
 
 export async function deleteEvent(formData: FormData) {
-  const supabase = await createClient()
   const id = formData.get('id') as string
+  if (!id) throw new Error('Event ID is required')
 
-  const { error } = await supabase.from('events').delete().eq('id', id)
-  if (error) console.error('Error deleting event:', error)
+  const supabase = await createClient()
+
+  const { error } = await supabase
+    .from('events')
+    .delete()
+    .eq('id', id)
+
+  if (error) {
+    console.error('Error deleting event:', error)
+    throw new Error('Failed to delete event')
+  }
 
   revalidatePath('/admin')
+  revalidatePath('/dashboard')
   redirect('/admin')
 }
