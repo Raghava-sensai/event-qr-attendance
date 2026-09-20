@@ -8,14 +8,14 @@ export async function submitReview(formData: FormData) {
   const content = formData.get('content') as string
   
   if (!content) {
-    return { error: 'Review content is required' }
+    throw new Error('Review content is required')
   }
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    return { error: 'Not authenticated' }
+    throw new Error('Not authenticated')
   }
 
   // Insert review
@@ -28,7 +28,7 @@ export async function submitReview(formData: FormData) {
 
   if (error) {
     console.error('Failed to submit review:', error)
-    return { error: 'Failed to submit review. Please try again.' }
+    throw new Error('Failed to submit review. Please try again.')
   }
 
   // Get admin email setting
@@ -51,14 +51,14 @@ export async function updateAdminSettings(formData: FormData) {
   const email = formData.get('email') as string
   
   if (!email) {
-    return { error: 'Email is required' }
+    throw new Error('Email is required')
   }
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    return { error: 'Not authenticated' }
+    throw new Error('Not authenticated')
   }
 
   const { error } = await supabase
@@ -68,7 +68,7 @@ export async function updateAdminSettings(formData: FormData) {
 
   if (error) {
     console.error('Failed to update settings:', error)
-    return { error: 'Failed to update settings' }
+    throw new Error('Failed to update settings')
   }
 
   revalidatePath('/admin/settings')
