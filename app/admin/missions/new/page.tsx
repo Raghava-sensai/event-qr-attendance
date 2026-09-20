@@ -2,7 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { createMission } from '@/app/actions/missions'
 import Link from 'next/link'
 
-export default async function NewMissionPage({ searchParams }: { searchParams: { error?: string } }) {
+export default async function NewMissionPage(props: { searchParams: Promise<{ error?: string }> }) {
+  const searchParams = await props.searchParams;
   const supabase = await createClient()
 
   // Get unique categories currently used in events to populate suggestions

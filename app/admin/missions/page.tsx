@@ -78,9 +78,6 @@ export default async function AdminMissions() {
                     type="submit"
                     className="p-1.5 text-[#827893] hover:text-red-600 hover:bg-red-50 rounded-2xl transition-colors"
                     title="Delete Mission"
-                    onClick={(e) => {
-                      if(!confirm('Are you sure you want to delete this mission?')) e.preventDefault();
-                    }}
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
