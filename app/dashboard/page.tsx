@@ -25,7 +25,7 @@ export default async function DashboardPage() {
   // Fetch all events to generate the timeline
   const { data: allEvents } = await supabase
     .from('events')
-    .select('id, title, description, stage_label, tags, status')
+    .select('id, title, description, stage_label, tags, status, xp_value')
     .order('event_date', { ascending: true })
 
   // Fetch attendances to calculate Aura XP
@@ -41,8 +41,9 @@ export default async function DashboardPage() {
     auraXP += (a.events?.xp_value) || 1
   })
 
-  const timelineEvents = allEvents?.filter(e => e.stage_label) || []
-  const totalStations = timelineEvents.length > 0 ? timelineEvents.length : 4
+  // Show only events the user has actually attended
+  const attendedEventIds = attendances?.map(a => a.event_id) || []
+  const timelineEvents = allEvents?.filter(e => attendedEventIds.includes(e.id)) || []
 
   return (
     <div className="min-h-screen bg-[#F9F8FF] text-[#3B2D4A] pb-32 font-sans relative">
@@ -138,36 +139,32 @@ export default async function DashboardPage() {
             <div className="absolute left-[11px] top-2 bottom-6 w-0.5 bg-[#F2E8DF]"></div>
 
             {(() => {
-              // Show events that have a stage_label defined OR events the user has attended
-              const attendedEventIds = attendances?.map(a => a.event_id) || []
-              const timelineEvents = allEvents?.filter(e => e.stage_label || attendedEventIds.includes(e.id)) || []
-              
               if (timelineEvents.length === 0) {
                 return (
                   <div className="text-sm text-[#827893] italic bg-white rounded-[2rem] p-6 shadow-sm border border-[#EBE0F8]">
-                    No stages have been defined by the admin yet, and you haven't scanned any QR codes.
+                    You haven't checked into any events yet. Scan a QR code to begin your journey!
                   </div>
                 )
               }
 
               return timelineEvents.map((stage, i) => {
-                const done = attendances?.some(a => a.event_id === stage.id)
+                const done = true // Since we only show attended events
                 // Split comma separated tags into array
                 const pills = stage.tags ? stage.tags.split(',').map((t: string) => t.trim()).filter(Boolean) : []
                 
                 return (
                   <div key={stage.id} className="relative">
                     {/* Timeline Dot */}
-                    <div className={`absolute -left-[29px] top-4 w-3 h-3 rounded-full border-2 border-white ${done ? 'bg-[#E5C1FA]' : 'bg-[#EBE0F8]'}`}></div>
+                    <div className={`absolute -left-[29px] top-4 w-3 h-3 rounded-full border-2 border-white bg-[#E5C1FA]`}></div>
                     
                     {/* Stage Card */}
                     <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-[#EBE0F8]">
                       <div className="flex justify-between items-start mb-2">
                         <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest uppercase">
-                          {stage.stage_label || 'Hidden Stage Unlocked!'}
+                          {stage.stage_label || 'Unlocked Stage!'}
                         </div>
-                        <div className={`text-[10px] font-bold px-3 py-1 rounded-full ${done ? 'bg-[#D1F2D1] text-[#2E7D32]' : 'bg-[#F5F4F8] text-[#9D63D0]'}`}>
-                          {done ? 'Done' : 'To do'}
+                        <div className="text-[10px] font-bold px-3 py-1 rounded-full bg-[#D1F2D1] text-[#2E7D32]">
+                          Done (+{stage.xp_value || 1} XP)
                         </div>
                       </div>
                       <h4 className="text-xl font-extrabold text-[#3B2D4A] mb-2">{stage.title}</h4>
