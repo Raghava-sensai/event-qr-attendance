@@ -14,7 +14,7 @@ export default async function LoginPage({
     <div className="flex min-h-screen items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8 rounded-[2rem] bg-white p-8 shadow-sm border border-[#EBE0F8]">
         <div className="text-center">
-          <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest mb-1 uppercase">SAGA × AURELIA</div>
+          <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest mb-1 uppercase">AURA QUEST</div>
           <h2 className="text-3xl font-extrabold tracking-tight text-[#3B2D4A]">Sign in</h2>
           <p className="mt-2 text-sm text-[#827893]">
             Or{' '}

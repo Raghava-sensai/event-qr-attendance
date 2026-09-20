@@ -36,7 +36,7 @@ export default async function AdminSettingsPage() {
         title="Admin Settings: Configure global application settings like where user reviews should be sent."
       >
         <div className="sm:flex-auto">
-          <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest mb-1 uppercase">SAGA × AURELIA</div>
+          <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest mb-1 uppercase">AURA QUEST</div>
           <h1 className="text-2xl font-extrabold leading-6 text-[#3B2D4A]">Global Settings</h1>
           <p className="mt-2 text-sm text-[#827893]">
             Configure where notifications and reviews are sent.

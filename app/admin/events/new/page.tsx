@@ -77,7 +77,7 @@ export default function NewEventPage() {
 
             <div className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2">
               <div>
-                <label htmlFor="stage_label" className="block text-sm font-medium leading-6 text-[#3B2D4A]">Stage Label (Aurelia Fest)</label>
+                <label htmlFor="stage_label" className="block text-sm font-medium leading-6 text-[#3B2D4A]">Stage Label (Aura Quest)</label>
                 <div className="mt-2">
                   <input
                     type="text"

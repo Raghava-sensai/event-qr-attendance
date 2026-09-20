@@ -26,7 +26,7 @@ export default async function AdminDashboard() {
         title="Admin Dashboard: Here you can view all event QR codes, check who has scanned them, and set up Badge Rules."
       >
         <div className="sm:flex-auto">
-          <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest mb-1 uppercase">SAGA × AURELIA</div>
+          <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest mb-1 uppercase">AURA QUEST</div>
           <h1 className="text-2xl font-extrabold leading-6 text-[#3B2D4A]">Attendance Admin</h1>
           <p className="mt-2 text-sm text-[#827893]">
             A list of all events and their attendance statistics.

@@ -25,7 +25,7 @@ export default function ReviewPage() {
           
           <h1 className="text-2xl font-extrabold text-center text-[#3B2D4A] mb-2">Leave a Review</h1>
           <p className="text-center text-[#827893] text-sm mb-8">
-            Tell us about your experience at Aurelia Fest! Your feedback will be sent directly to the organizers.
+            Tell us about your experience at Aura Quest! Your feedback will be sent directly to the organizers.
           </p>
 
           <form action={submitReview} className="space-y-6">

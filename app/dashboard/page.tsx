@@ -74,12 +74,12 @@ export default async function DashboardPage() {
           <div>
             <div className="flex items-center gap-3 mb-1">
               <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest uppercase">
-                SAGA × AURELIA
+                AURA QUEST
               </div>
               <LiveClock />
             </div>
             <h1 className="text-2xl font-extrabold text-[#3B2D4A] tracking-tight leading-tight">
-              Welcome to Aurelia Fest!
+              Welcome to Aura Quest!
             </h1>
             <p className="text-sm text-[#827893] mt-1">
               Feel · Flow · Flourish

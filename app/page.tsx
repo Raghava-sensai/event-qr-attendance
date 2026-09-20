@@ -8,9 +8,9 @@ export default function HomePage() {
         <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
             <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
-              <span className="sr-only">Aurelia Fest</span>
+              <span className="sr-only">Aura Quest</span>
               <QrCode className="h-8 w-8 text-[#9D63D0]" />
-              <span className="font-bold text-xl tracking-tight text-[#3B2D4A]">✨ SAGA × AURELIA</span>
+              <span className="font-bold text-xl tracking-tight text-[#3B2D4A]">✨ AURA QUEST</span>
             </Link>
           </div>
           <div className="flex flex-1 justify-end items-center gap-6">
@@ -32,10 +32,10 @@ export default function HomePage() {
         <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight text-[#3B2D4A] sm:text-6xl">
-              Welcome to Aurelia Fest!
+              Welcome to Aura Quest!
             </h1>
             <p className="mt-6 text-lg leading-8 text-[#827893]">
-              Feel · Flow · Flourish. Immerse yourself in the SAGA × AURELIA experience. Scan QR codes at each station, collect Aura XP, and flourish your journey.
+              Feel · Flow · Flourish. Immerse yourself in the AURA QUEST experience. Scan QR codes at each station, collect Aura XP, and flourish your journey.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link

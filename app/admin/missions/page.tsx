@@ -18,7 +18,7 @@ export default async function AdminMissions() {
         title="Manage Badge Rules: This page lets you set up rules for when users unlock badges. e.g. 'Get the Workshop badge after checking into 3 workshop events!'"
       >
         <div className="sm:flex-auto">
-          <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest mb-1 uppercase">SAGA × AURELIA</div>
+          <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest mb-1 uppercase">AURA QUEST</div>
           <h1 className="text-2xl font-extrabold leading-6 text-[#3B2D4A]">Manage Badge Rules</h1>
           <p className="mt-2 text-sm text-[#827893]">
             Define gamification milestones (like getting 4 Aura XP) to automatically reward students with badges upon scan.
