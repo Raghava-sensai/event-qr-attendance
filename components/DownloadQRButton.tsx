@@ -27,7 +27,7 @@ export default function DownloadQRButton({ eventName }: { eventName: string }) {
   return (
     <button 
       onClick={downloadQR}
-      className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-[#D49A89] font-medium rounded-lg hover:bg-blue-100 transition-colors"
+      className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-[#9D63D0] font-medium rounded-lg hover:bg-blue-100 transition-colors"
     >
       <Download className="h-4 w-4" />
       Download QR SVG

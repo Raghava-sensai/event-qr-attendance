@@ -20,12 +20,12 @@ export default async function EventScanPage({
 
   if (eventError || !event) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#FFFDF9] p-4">
+      <div className="flex min-h-screen items-center justify-center bg-[#F9F8FF] p-4">
         <div className="w-full max-w-md rounded-[2rem] bg-white p-8 shadow-lg text-center">
           <AlertCircle className="mx-auto h-12 w-12 text-red-500 mb-4" />
-          <h2 className="text-2xl font-bold text-[#7A6A64] mb-2">Invalid Event</h2>
-          <p className="text-[#A39189] mb-6">This QR code does not match any known event.</p>
-          <Link href="/dashboard" className="text-[#D49A89] hover:underline">Go to Dashboard</Link>
+          <h2 className="text-2xl font-bold text-[#3B2D4A] mb-2">Invalid Event</h2>
+          <p className="text-[#827893] mb-6">This QR code does not match any known event.</p>
+          <Link href="/dashboard" className="text-[#9D63D0] hover:underline">Go to Dashboard</Link>
         </div>
       </div>
     )
@@ -34,12 +34,12 @@ export default async function EventScanPage({
   // 2. Check if event is active
   if (event.status !== 'active') {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#FFFDF9] p-4">
+      <div className="flex min-h-screen items-center justify-center bg-[#F9F8FF] p-4">
         <div className="w-full max-w-md rounded-[2rem] bg-white p-8 shadow-lg text-center">
           <Info className="mx-auto h-12 w-12 text-yellow-500 mb-4" />
-          <h2 className="text-2xl font-bold text-[#7A6A64] mb-2">Event Not Active</h2>
-          <p className="text-[#A39189] mb-6">This event is currently marked as {event.status}. Check-ins are not being accepted at this time.</p>
-          <Link href="/dashboard" className="text-[#D49A89] hover:underline">Go to Dashboard</Link>
+          <h2 className="text-2xl font-bold text-[#3B2D4A] mb-2">Event Not Active</h2>
+          <p className="text-[#827893] mb-6">This event is currently marked as {event.status}. Check-ins are not being accepted at this time.</p>
+          <Link href="/dashboard" className="text-[#9D63D0] hover:underline">Go to Dashboard</Link>
         </div>
       </div>
     )
@@ -127,12 +127,12 @@ export default async function EventScanPage({
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#FFFDF9] p-4">
+    <div className="flex min-h-screen items-center justify-center bg-[#F9F8FF] p-4">
       <div className="w-full max-w-md rounded-[2rem] bg-white p-8 shadow-lg text-center">
         {status === 'success' && (
           <>
             <CheckCircle className="mx-auto h-16 w-16 text-green-500 mb-4" />
-            <h2 className="text-2xl font-bold text-[#7A6A64] mb-2">✓ Check-in Complete</h2>
+            <h2 className="text-2xl font-bold text-[#3B2D4A] mb-2">✓ Check-in Complete</h2>
             
             {unlockedMilestone && (
               <div className="mt-6 mb-2 bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-200 rounded-[2rem] p-4 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -150,30 +150,30 @@ export default async function EventScanPage({
         {status === 'duplicate' && (
           <>
             <CheckCircle className="mx-auto h-16 w-16 text-blue-500 mb-4" />
-            <h2 className="text-2xl font-bold text-[#7A6A64] mb-2">Already Checked In</h2>
-            <p className="text-[#A39189] mb-2">You have already recorded your participation for this event.</p>
+            <h2 className="text-2xl font-bold text-[#3B2D4A] mb-2">Already Checked In</h2>
+            <p className="text-[#827893] mb-2">You have already recorded your participation for this event.</p>
           </>
         )}
 
         {status === 'error' && (
           <>
             <AlertCircle className="mx-auto h-16 w-16 text-red-500 mb-4" />
-            <h2 className="text-2xl font-bold text-[#7A6A64] mb-2">An Error Occurred</h2>
-            <p className="text-[#A39189] mb-2">We could not record your participation. Please try again.</p>
+            <h2 className="text-2xl font-bold text-[#3B2D4A] mb-2">An Error Occurred</h2>
+            <p className="text-[#827893] mb-2">We could not record your participation. Please try again.</p>
           </>
         )}
 
-        <div className="bg-[#FFFDF9] p-4 rounded-lg my-6 text-left border border-[#F2E8DF]">
-          <h3 className="text-lg font-semibold text-[#7A6A64] border-b pb-2 mb-2">{event.title}</h3>
-          <p className="text-sm text-[#A39189] mb-4">{event.description}</p>
+        <div className="bg-[#F9F8FF] p-4 rounded-lg my-6 text-left border border-[#EBE0F8]">
+          <h3 className="text-lg font-semibold text-[#3B2D4A] border-b pb-2 mb-2">{event.title}</h3>
+          <p className="text-sm text-[#827893] mb-4">{event.description}</p>
           
-          <div className="flex items-center text-sm text-[#A39189] mb-1">
+          <div className="flex items-center text-sm text-[#827893] mb-1">
             <Calendar className="mr-2 h-4 w-4" />
             Event Date: {new Date(event.event_date).toLocaleDateString()}
           </div>
           
           {(status === 'success' || status === 'duplicate') && (
-            <div className="flex items-center text-sm text-[#A39189] font-medium text-green-700 mt-3 pt-3 border-t border-[#F2E8DF]">
+            <div className="flex items-center text-sm text-[#827893] font-medium text-green-700 mt-3 pt-3 border-t border-[#EBE0F8]">
               Recorded at: {attendanceTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </div>
           )}
@@ -181,7 +181,7 @@ export default async function EventScanPage({
 
         <Link 
           href="/dashboard" 
-          className="inline-flex justify-center w-full rounded-2xl bg-[#FFE5D9] px-3 py-3 text-sm font-semibold text-[#D49A89] shadow-sm hover:bg-[#FFD1C1]"
+          className="inline-flex justify-center w-full rounded-2xl bg-[#EBE0F8] px-3 py-3 text-sm font-semibold text-[#9D63D0] shadow-sm hover:bg-[#E0D0F5]"
         >
           Go to Dashboard
         </Link>

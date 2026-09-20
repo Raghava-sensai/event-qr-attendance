@@ -12,13 +12,13 @@ export default async function LoginPage({
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-8 rounded-[2rem] bg-white p-8 shadow-sm border border-[#F2E8DF]">
+      <div className="w-full max-w-md space-y-8 rounded-[2rem] bg-white p-8 shadow-sm border border-[#EBE0F8]">
         <div className="text-center">
-          <div className="text-[10px] font-bold text-[#D49A89] tracking-widest mb-1 uppercase">SAGA × AURELIA</div>
-          <h2 className="text-3xl font-extrabold tracking-tight text-[#7A6A64]">Sign in</h2>
-          <p className="mt-2 text-sm text-[#A39189]">
+          <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest mb-1 uppercase">SAGA × AURELIA</div>
+          <h2 className="text-3xl font-extrabold tracking-tight text-[#3B2D4A]">Sign in</h2>
+          <p className="mt-2 text-sm text-[#827893]">
             Or{' '}
-            <Link href={`/register?next=${encodeURIComponent(nextUrl)}`} className="font-medium text-[#D49A89] hover:text-[#B58273]">
+            <Link href={`/register?next=${encodeURIComponent(nextUrl)}`} className="font-medium text-[#9D63D0] hover:text-[#8B52BD]">
               create a new account
             </Link>
           </p>
@@ -42,7 +42,7 @@ export default async function LoginPage({
                 type="email"
                 autoComplete="email"
                 required
-                className="relative block w-full rounded-2xl border-0 py-1.5 text-[#7A6A64] ring-1 ring-inset ring-[#F2E8DF] placeholder:text-[#A39189] focus:z-10 focus:ring-2 focus:ring-inset focus:ring-[#FFD1C1] sm:text-sm sm:leading-6 px-3"
+                className="relative block w-full rounded-2xl border-0 py-1.5 text-[#3B2D4A] ring-1 ring-inset ring-[#EBE0F8] placeholder:text-[#827893] focus:z-10 focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6 px-3"
                 placeholder="Email address"
               />
             </div>
@@ -54,7 +54,7 @@ export default async function LoginPage({
                 type="password"
                 autoComplete="current-password"
                 required
-                className="relative block w-full rounded-2xl border-0 py-1.5 text-[#7A6A64] ring-1 ring-inset ring-[#F2E8DF] placeholder:text-[#A39189] focus:z-10 focus:ring-2 focus:ring-inset focus:ring-[#FFD1C1] sm:text-sm sm:leading-6 px-3"
+                className="relative block w-full rounded-2xl border-0 py-1.5 text-[#3B2D4A] ring-1 ring-inset ring-[#EBE0F8] placeholder:text-[#827893] focus:z-10 focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6 px-3"
                 placeholder="Password"
               />
             </div>
@@ -62,7 +62,7 @@ export default async function LoginPage({
 
           <div className="flex items-center justify-between">
             <div className="text-sm">
-              <Link href={`/forgot-password?next=${encodeURIComponent(nextUrl)}`} className="font-medium text-[#D49A89] hover:text-[#D49A89]">
+              <Link href={`/forgot-password?next=${encodeURIComponent(nextUrl)}`} className="font-medium text-[#9D63D0] hover:text-[#9D63D0]">
                 Forgot your password?
               </Link>
             </div>

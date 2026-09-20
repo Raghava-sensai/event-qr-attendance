@@ -49,22 +49,22 @@ export default async function NewMissionPage() {
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-6">
-        <Link href="/admin/missions" className="text-sm font-medium text-[#D49A89] hover:text-[#D49A89]">
+        <Link href="/admin/missions" className="text-sm font-medium text-[#9D63D0] hover:text-[#9D63D0]">
           ← Back to Missions
         </Link>
       </div>
 
-      <div className="bg-white shadow-sm sm:rounded-[2rem] border border-[#F2E8DF]">
+      <div className="bg-white shadow-sm sm:rounded-[2rem] border border-[#EBE0F8]">
         <div className="px-4 py-6 sm:p-8">
-          <h1 className="text-xl font-semibold leading-7 text-[#7A6A64]">Create New Mission</h1>
-          <p className="mt-1 text-sm leading-6 text-[#A39189]">
+          <h1 className="text-xl font-semibold leading-7 text-[#3B2D4A]">Create New Mission</h1>
+          <p className="mt-1 text-sm leading-6 text-[#827893]">
             Define a challenge for students to complete by attending events.
           </p>
 
           <form action={createMission} className="mt-8 space-y-6">
             <div className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
               <div className="sm:col-span-4">
-                <label htmlFor="name" className="block text-sm font-medium leading-6 text-[#7A6A64]">
+                <label htmlFor="name" className="block text-sm font-medium leading-6 text-[#3B2D4A]">
                   Mission Name
                 </label>
                 <div className="mt-2">
@@ -74,13 +74,13 @@ export default async function NewMissionPage() {
                     id="name"
                     required
                     placeholder="e.g. Photography Master"
-                    className="block w-full rounded-2xl border-0 py-1.5 text-[#7A6A64] shadow-sm ring-1 ring-inset ring-[#F2E8DF] placeholder:text-[#A39189] focus:ring-2 focus:ring-inset focus:ring-[#FFD1C1] sm:text-sm sm:leading-6"
+                    className="block w-full rounded-2xl border-0 py-1.5 text-[#3B2D4A] shadow-sm ring-1 ring-inset ring-[#EBE0F8] placeholder:text-[#827893] focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
 
               <div className="col-span-full">
-                <label htmlFor="description" className="block text-sm font-medium leading-6 text-[#7A6A64]">
+                <label htmlFor="description" className="block text-sm font-medium leading-6 text-[#3B2D4A]">
                   Description
                 </label>
                 <div className="mt-2">
@@ -88,21 +88,21 @@ export default async function NewMissionPage() {
                     id="description"
                     name="description"
                     rows={2}
-                    className="block w-full rounded-2xl border-0 py-1.5 text-[#7A6A64] shadow-sm ring-1 ring-inset ring-[#F2E8DF] placeholder:text-[#A39189] focus:ring-2 focus:ring-inset focus:ring-[#FFD1C1] sm:text-sm sm:leading-6"
+                    className="block w-full rounded-2xl border-0 py-1.5 text-[#3B2D4A] shadow-sm ring-1 ring-inset ring-[#EBE0F8] placeholder:text-[#827893] focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6"
                     placeholder="Attend 3 photography events to unlock this badge."
                   />
                 </div>
               </div>
 
               <div className="sm:col-span-3">
-                <label htmlFor="target_category" className="block text-sm font-medium leading-6 text-[#7A6A64]">
+                <label htmlFor="target_category" className="block text-sm font-medium leading-6 text-[#3B2D4A]">
                   Target Category
                 </label>
                 <div className="mt-2">
                   <select
                     id="target_category"
                     name="target_category"
-                    className="block w-full rounded-2xl border-0 py-1.5 text-[#7A6A64] shadow-sm ring-1 ring-inset ring-[#F2E8DF] focus:ring-2 focus:ring-inset focus:ring-[#FFD1C1] sm:text-sm sm:leading-6"
+                    className="block w-full rounded-2xl border-0 py-1.5 text-[#3B2D4A] shadow-sm ring-1 ring-inset ring-[#EBE0F8] focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6"
                   >
                     <option value="All">All Categories (Global)</option>
                     <option value="General">General</option>
@@ -118,7 +118,7 @@ export default async function NewMissionPage() {
               </div>
 
               <div className="sm:col-span-3">
-                <label htmlFor="required_count" className="block text-sm font-medium leading-6 text-[#7A6A64]">
+                <label htmlFor="required_count" className="block text-sm font-medium leading-6 text-[#3B2D4A]">
                   Required Events
                 </label>
                 <div className="mt-2">
@@ -129,13 +129,13 @@ export default async function NewMissionPage() {
                     min="1"
                     defaultValue="3"
                     required
-                    className="block w-full rounded-2xl border-0 py-1.5 text-[#7A6A64] shadow-sm ring-1 ring-inset ring-[#F2E8DF] focus:ring-2 focus:ring-inset focus:ring-[#FFD1C1] sm:text-sm sm:leading-6"
+                    className="block w-full rounded-2xl border-0 py-1.5 text-[#3B2D4A] shadow-sm ring-1 ring-inset ring-[#EBE0F8] focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
 
               <div className="sm:col-span-4">
-                <label htmlFor="badge_name" className="block text-sm font-medium leading-6 text-[#7A6A64]">
+                <label htmlFor="badge_name" className="block text-sm font-medium leading-6 text-[#3B2D4A]">
                   Reward Badge Name
                 </label>
                 <div className="mt-2">
@@ -145,13 +145,13 @@ export default async function NewMissionPage() {
                     id="badge_name"
                     required
                     placeholder="e.g. Shutterbug"
-                    className="block w-full rounded-2xl border-0 py-1.5 text-[#7A6A64] shadow-sm ring-1 ring-inset ring-[#F2E8DF] focus:ring-2 focus:ring-inset focus:ring-[#FFD1C1] sm:text-sm sm:leading-6"
+                    className="block w-full rounded-2xl border-0 py-1.5 text-[#3B2D4A] shadow-sm ring-1 ring-inset ring-[#EBE0F8] focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
 
               <div className="sm:col-span-2">
-                <label htmlFor="badge_icon" className="block text-sm font-medium leading-6 text-[#7A6A64]">
+                <label htmlFor="badge_icon" className="block text-sm font-medium leading-6 text-[#3B2D4A]">
                   Emoji Icon
                 </label>
                 <div className="mt-2">
@@ -162,19 +162,19 @@ export default async function NewMissionPage() {
                     maxLength={2}
                     defaultValue="🏆"
                     required
-                    className="block w-full text-center text-xl rounded-2xl border-0 py-1.5 text-[#7A6A64] shadow-sm ring-1 ring-inset ring-[#F2E8DF] focus:ring-2 focus:ring-inset focus:ring-[#FFD1C1] sm:leading-6"
+                    className="block w-full text-center text-xl rounded-2xl border-0 py-1.5 text-[#3B2D4A] shadow-sm ring-1 ring-inset ring-[#EBE0F8] focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:leading-6"
                   />
                 </div>
               </div>
             </div>
 
             <div className="mt-6 flex items-center justify-end gap-x-6">
-              <Link href="/admin/missions" className="text-sm font-semibold leading-6 text-[#7A6A64]">
+              <Link href="/admin/missions" className="text-sm font-semibold leading-6 text-[#3B2D4A]">
                 Cancel
               </Link>
               <button
                 type="submit"
-                className="rounded-2xl bg-[#FFE5D9] px-3 py-2 text-sm font-semibold text-[#D49A89] shadow-sm hover:bg-[#FFD1C1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                className="rounded-2xl bg-[#EBE0F8] px-3 py-2 text-sm font-semibold text-[#9D63D0] shadow-sm hover:bg-[#E0D0F5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
               >
                 Create Mission
               </button>
