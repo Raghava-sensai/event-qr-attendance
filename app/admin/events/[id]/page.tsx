@@ -84,13 +84,20 @@ export default async function EventDetailsPage({
                 </div>
               </div>
             </div>
-            
-            <Link 
-              href={`/admin/events/${id}?qr=true`}
-              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
-            >
-              Show QR Code
-            </Link>
+            <div className="flex gap-2">
+              <Link 
+                href={`/admin/events/${id}/edit`}
+                className="rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              >
+                Edit
+              </Link>
+              <Link 
+                href={`/admin/events/${id}?qr=true`}
+                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+              >
+                Show QR Code
+              </Link>
+            </div>
           </div>
 
           <div className="px-6 py-6">

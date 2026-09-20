@@ -2,30 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Camera, RefreshCw, Home, Gift, Sparkles, QrCode } from 'lucide-react'
 
-// Hardcoded Aurelia Fest Stages to perfectly match the UI request
-const AURELIA_STAGES = [
-  {
-    id: 'stage-1',
-    label: 'STAGE 1 · FEEL',
-    title: 'The Prism Studio',
-    desc: 'Let colour do the talking. Paint with your eyes closed and your heart open.',
-    pills: ['Face Paint', 'Blindfolded Art']
-  },
-  {
-    id: 'stage-2',
-    label: 'STAGE 2 · FLOW',
-    title: 'The Connection Nook',
-    desc: 'Slow hands, quiet mind. Make something small with someone new.',
-    pills: ['Pipe-Cleaner Crafts', 'Memory Jar', 'Line Art']
-  },
-  {
-    id: 'stage-3',
-    label: 'STAGE 3 · FLOURISH',
-    title: 'The Keepsake Vault',
-    desc: 'Carry the calm home. Trade your Aura XP for a keepsake.',
-    pills: ['Rewards & Souvenirs']
-  }
-]
+// Dashboard dynamically generates stages from events
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -44,25 +21,22 @@ export default async function DashboardPage() {
 
   const initials = profile?.username?.substring(0, 2).toUpperCase() || 'AQ'
 
+  // Fetch all events to generate the timeline
+  const { data: allEvents } = await supabase
+    .from('events')
+    .select('id, title, description, stage_label, tags, status')
+    .order('event_date', { ascending: true })
+
   // Fetch attendances to calculate Aura XP
-  // For the sake of the Aurelia Fest demo, we'll just count total attendances
   const { data: attendances } = await supabase
     .from('attendances')
-    .select('id, events(title)')
+    .select('id, event_id, events(title)')
     .eq('user_id', user.id)
 
-  const auraXP = attendances?.length || 0
-  const totalStations = 4 // 3 stages + 1 photobooth
-
-  // Helper to check if a stage is done based on event titles matching
-  // (In a real app, we'd match exact event IDs)
-  const isStageDone = (stageTitle: string) => {
-    return attendances?.some(a => {
-      // @ts-expect-error join type
-      const t = a.events?.title || ''
-      return t.toLowerCase().includes(stageTitle.toLowerCase())
-    })
-  }
+  // Calculate Aura XP (just counting how many stages they visited)
+  const timelineEvents = allEvents?.filter(e => e.stage_label) || []
+  const auraXP = attendances?.filter(a => timelineEvents.some(e => e.id === a.event_id)).length || 0
+  const totalStations = timelineEvents.length > 0 ? timelineEvents.length : 4
 
   return (
     <div className="min-h-screen bg-[#F9F8FF] text-[#3B2D4A] pb-32 font-sans relative">
@@ -148,38 +122,54 @@ export default async function DashboardPage() {
             {/* Vertical Timeline Line */}
             <div className="absolute left-[11px] top-2 bottom-6 w-0.5 bg-[#EBE0F8]"></div>
 
-            {AURELIA_STAGES.map((stage, i) => {
-              const done = isStageDone(stage.title)
-              return (
-                <div key={stage.id} className="relative">
-                  {/* Timeline Dot */}
-                  <div className={`absolute -left-[29px] top-4 w-3 h-3 rounded-full border-2 border-white ${done ? 'bg-[#9D63D0]' : 'bg-[#EBE0F8]'}`}></div>
-                  
-                  {/* Stage Card */}
-                  <div className="bg-white rounded-[2rem] p-6 shadow-sm">
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest uppercase">
-                        {stage.label}
+            {(() => {
+              // Only show events that have a stage_label defined
+              const timelineEvents = allEvents?.filter(e => e.stage_label) || []
+              
+              if (timelineEvents.length === 0) {
+                return (
+                  <div className="text-sm text-[#827893] italic bg-white rounded-[2rem] p-6 shadow-sm">
+                    No stages have been defined by the admin yet.
+                  </div>
+                )
+              }
+
+              return timelineEvents.map((stage, i) => {
+                const done = attendances?.some(a => a.event_id === stage.id)
+                // Split comma separated tags into array
+                const pills = stage.tags ? stage.tags.split(',').map((t: string) => t.trim()).filter(Boolean) : []
+                
+                return (
+                  <div key={stage.id} className="relative">
+                    {/* Timeline Dot */}
+                    <div className={`absolute -left-[29px] top-4 w-3 h-3 rounded-full border-2 border-white ${done ? 'bg-[#9D63D0]' : 'bg-[#EBE0F8]'}`}></div>
+                    
+                    {/* Stage Card */}
+                    <div className="bg-white rounded-[2rem] p-6 shadow-sm">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest uppercase">
+                          {stage.stage_label}
+                        </div>
+                        <div className={`text-[10px] font-bold px-3 py-1 rounded-full ${done ? 'bg-[#D1F2D1] text-[#2E7D32]' : 'bg-[#F3E5F5] text-[#9D63D0]'}`}>
+                          {done ? 'Done' : 'To do'}
+                        </div>
                       </div>
-                      <div className={`text-[10px] font-bold px-3 py-1 rounded-full ${done ? 'bg-green-100 text-green-700' : 'bg-[#F3E5F5] text-[#9D63D0]'}`}>
-                        {done ? 'Done' : 'To do'}
+                      <h4 className="text-xl font-extrabold text-[#3B2D4A] mb-2">{stage.title}</h4>
+                      <p className="text-sm text-[#827893] leading-relaxed mb-4">
+                        {stage.description}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {pills.map((pill: string) => (
+                          <span key={pill} className="bg-[#F5F4F8] text-[#827893] text-xs font-bold px-3 py-1.5 rounded-full">
+                            {pill}
+                          </span>
+                        ))}
                       </div>
-                    </div>
-                    <h4 className="text-xl font-extrabold text-[#3B2D4A] mb-2">{stage.title}</h4>
-                    <p className="text-sm text-[#827893] leading-relaxed mb-4">
-                      {stage.desc}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {stage.pills.map(pill => (
-                        <span key={pill} className="bg-[#F5F4F8] text-[#827893] text-xs font-bold px-3 py-1.5 rounded-full">
-                          {pill}
-                        </span>
-                      ))}
                     </div>
                   </div>
-                </div>
-              )
-            })}
+                )
+              })
+            })()}
           </div>
         </div>
 

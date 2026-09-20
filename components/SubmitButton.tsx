@@ -5,7 +5,7 @@ import { Loader2 } from 'lucide-react'
 
 export function SubmitButton({ 
   children, 
-  className = "w-full rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 flex justify-center items-center" 
+  className = "w-full rounded-2xl bg-[#EFCAFA] hover:bg-[#E5B5F5] px-3 py-3 text-sm font-bold text-[#3B2D4A] shadow-sm transition-colors flex justify-center items-center" 
 }: { 
   children: React.ReactNode,
   className?: string

@@ -23,21 +23,22 @@ export default async function AdminDashboard() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-2xl font-semibold leading-6 text-gray-900">Attendance Admin</h1>
-          <p className="mt-2 text-sm text-gray-700">
+          <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest mb-1 uppercase">SAGA × AURELIA</div>
+          <h1 className="text-2xl font-extrabold leading-6 text-[#3B2D4A]">Attendance Admin</h1>
+          <p className="mt-2 text-sm text-[#827893]">
             A list of all events and their attendance statistics.
           </p>
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none flex gap-3">
           <Link
             href="/admin/missions"
-            className="block rounded-md bg-white px-3 py-2 text-center text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+            className="block rounded-2xl bg-white px-4 py-2 text-center text-sm font-bold text-[#3B2D4A] shadow-sm ring-1 ring-inset ring-gray-100 hover:bg-gray-50"
           >
             Manage Missions
           </Link>
           <Link
             href="/admin/events/new"
-            className="block rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            className="block rounded-2xl bg-[#EFCAFA] px-4 py-2 text-center text-sm font-bold text-[#3B2D4A] shadow-sm hover:bg-[#E5B5F5]"
           >
             <span className="flex items-center">
               <Plus className="mr-1 h-4 w-4" />
