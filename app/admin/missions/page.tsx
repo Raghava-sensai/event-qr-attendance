@@ -43,7 +43,13 @@ export default async function AdminMissions() {
           <div key={mission.id} className="bg-white rounded-[2rem] shadow-sm border border-[#EBE0F8] overflow-hidden flex flex-col group">
             <div className="p-6 flex-1 relative">
               <div className="flex justify-between items-start mb-4">
-                <div className="text-4xl bg-[#F9F8FF] p-3 rounded-full border border-[#EBE0F8]">{mission.badge_icon}</div>
+                <div className="text-4xl bg-[#F9F8FF] p-3 rounded-full border border-[#EBE0F8] flex items-center justify-center w-[74px] h-[74px]">
+                  {mission.badge_icon?.startsWith('http') ? (
+                    <img src={mission.badge_icon} alt="Badge" className="w-10 h-10 object-contain" />
+                  ) : (
+                    mission.badge_icon
+                  )}
+                </div>
                 <span className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">
                   {mission.target_category}
                 </span>

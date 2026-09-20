@@ -125,7 +125,7 @@ export default async function NewMissionPage(props: { searchParams: Promise<{ er
 
               <div className="sm:col-span-2">
                 <label htmlFor="badge_icon" className="block text-sm font-medium leading-6 text-[#3B2D4A]">
-                  Emoji Icon
+                  Badge Icon (Emoji or Image URL)
                 </label>
                 <div className="mt-2">
                   <input

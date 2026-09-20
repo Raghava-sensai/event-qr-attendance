@@ -95,23 +95,28 @@ export default async function EventScanPage({
 
   // 5. Check for mission unlock if successful
   let unlockedMilestone = null
+  let newlyUnlockedEvents: any[] = []
+  
   if (status === 'success') {
-    // 1. Get all attendances to count categories
+    // 1. Get all attendances to count categories and sum XP
     const { data: allAttendances } = await supabase
       .from('attendances')
       .select(`
-        events (category)
+        events (category, xp_value)
       `)
       .eq('user_id', user.id)
 
     let totalEvents = 0
+    let currentXP = 0
     const categoryCounts: Record<string, number> = {}
 
     if (allAttendances) {
       allAttendances.forEach(a => {
         totalEvents++
         // @ts-expect-error join cast
-        const category = a.events?.category || 'General'
+        const ev = a.events || {}
+        currentXP += ev.xp_value || 0
+        const category = ev.category || 'General'
         categoryCounts[category] = (categoryCounts[category] || 0) + 1
       })
     }
@@ -126,6 +131,15 @@ export default async function EventScanPage({
         return count === mission.required_count
       })
     }
+
+    // 4. Find if any secret event was JUST unlocked
+    const oldXP = currentXP - (event.xp_value || 0)
+    const { data: secretEvents } = await supabase
+      .from('events')
+      .select('*')
+      .gt('unlock_xp', 0)
+      
+    newlyUnlockedEvents = secretEvents?.filter(e => e.unlock_xp > oldXP && e.unlock_xp <= currentXP) || []
   }
 
   return (
@@ -139,11 +153,28 @@ export default async function EventScanPage({
             {unlockedMilestone && (
               <div className="mt-6 mb-2 bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-200 rounded-[2rem] p-4 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
                 <div className="flex justify-center mb-2">
-                  <span className="text-4xl animate-bounce">{unlockedMilestone.badge_icon}</span>
+                  {unlockedMilestone.badge_icon?.startsWith('http') ? (
+                    <img src={unlockedMilestone.badge_icon} alt="Badge" className="h-16 w-16 object-contain animate-bounce" />
+                  ) : (
+                    <span className="text-4xl animate-bounce">{unlockedMilestone.badge_icon}</span>
+                  )}
                 </div>
                 <h3 className="text-lg font-bold text-yellow-800">Mission Accomplished!</h3>
                 <p className="font-semibold text-yellow-900 text-xl my-1">{unlockedMilestone.badge_name}</p>
                 <p className="text-sm text-yellow-700">{unlockedMilestone.description}</p>
+              </div>
+            )}
+
+            {newlyUnlockedEvents.length > 0 && (
+              <div className="mt-4 mb-2 bg-gradient-to-r from-purple-50 to-fuchsia-50 border border-purple-200 rounded-[2rem] p-4 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+                <div className="flex justify-center mb-2">
+                  <span className="text-4xl animate-bounce">🔮</span>
+                </div>
+                <h3 className="text-lg font-bold text-purple-800">Secret Stage Unlocked!</h3>
+                {newlyUnlockedEvents.map((evt) => (
+                  <p key={evt.id} className="font-semibold text-purple-900 text-lg my-1">{evt.title}</p>
+                ))}
+                <p className="text-sm text-purple-700">Return to your dashboard to view your new events.</p>
               </div>
             )}
           </>
