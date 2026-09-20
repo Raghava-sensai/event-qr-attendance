@@ -1,5 +1,8 @@
 import { register } from '@/app/actions/auth'
 import Link from 'next/link'
+import { SubmitButton } from '@/components/SubmitButton'
+
+const AVATARS = ['🦊', '🐼', '🐸', '🦄', '🦖', '👻', '🤖', '🐙']
 
 export default async function RegisterPage({
   searchParams,
@@ -30,6 +33,20 @@ export default async function RegisterPage({
               {error}
             </div>
           )}
+
+          <div>
+            <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">Choose your Avatar</label>
+            <div className="grid grid-cols-4 gap-2 sm:gap-3">
+              {AVATARS.map((avatar, idx) => (
+                <label key={avatar} className="cursor-pointer relative">
+                  <input type="radio" name="avatar" value={avatar} defaultChecked={idx === 0} className="peer sr-only" />
+                  <div className="text-3xl sm:text-4xl p-2 text-center rounded-xl border-2 border-transparent peer-checked:border-blue-500 peer-checked:bg-blue-50 hover:bg-gray-50 transition-all">
+                    {avatar}
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
 
           <div className="space-y-4 rounded-md shadow-sm">
             <div>
@@ -72,12 +89,9 @@ export default async function RegisterPage({
           </div>
 
           <div>
-            <button
-              type="submit"
-              className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors"
-            >
+            <SubmitButton>
               Create Account
-            </button>
+            </SubmitButton>
           </div>
         </form>
       </div>

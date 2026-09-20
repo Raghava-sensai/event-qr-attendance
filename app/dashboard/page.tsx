@@ -13,7 +13,7 @@ export default async function DashboardPage() {
   // Get user's profile
   const { data: profile } = await supabase
     .from('profiles')
-    .select('username')
+    .select('username, avatar')
     .eq('id', user.id)
     .single()
 
@@ -108,11 +108,16 @@ export default async function DashboardPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
       <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold leading-6 text-gray-900">Welcome, {profile?.username || 'Student'}!</h1>
-          <p className="mt-2 text-sm text-gray-700">
-            Check in to events and complete missions to earn badges.
-          </p>
+        <div className="flex items-center gap-4">
+          <div className="text-5xl bg-white shadow-sm p-3 rounded-full border border-gray-100">
+            {profile?.avatar || '🦊'}
+          </div>
+          <div>
+            <h1 className="text-2xl font-semibold leading-6 text-gray-900">Welcome, {profile?.username || 'Student'}!</h1>
+            <p className="mt-2 text-sm text-gray-700">
+              Check in to events and complete missions to earn badges.
+            </p>
+          </div>
         </div>
         <Link 
           href="/dashboard/scan" 

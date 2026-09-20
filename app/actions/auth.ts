@@ -25,29 +25,34 @@ export async function login(formData: FormData) {
 export async function register(formData: FormData) {
   const supabase = await createClient()
 
-  const username = formData.get('username') as string
   const email = formData.get('email') as string
   const password = formData.get('password') as string
+  const username = formData.get('username') as string
+  const avatar = formData.get('avatar') as string || '🦊'
   const nextUrl = formData.get('next') as string || '/dashboard'
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    // By default, Supabase requires email verification. For this tutorial app, we assume 
-    // email confirmation is turned off in the Supabase dashboard, or they can verify.
-    // If you want auto-sign in after registration, make sure email confirmation is OFF.
-    options: {
-      data: {
-        username: username,
-      },
-    },
   })
 
   if (error) {
     return redirect(`/register?error=${encodeURIComponent(error.message)}&next=${encodeURIComponent(nextUrl)}`)
   }
 
-  // After registration, sign in or redirect
+  // Ensure profile is created with avatar
+  if (data.user) {
+    await supabase.from('profiles').insert({
+      id: data.user.id,
+      username,
+      avatar,
+      role: 'user' // default role
+    })
+  }
+
+  // Wait a small moment to ensure session is fully established before redirecting
+  await new Promise(resolve => setTimeout(resolve, 500))
+
   redirect(nextUrl)
 }
 
