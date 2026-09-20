@@ -59,3 +59,38 @@ export async function updateMission(formData: FormData) {
   revalidatePath('/admin/missions')
   redirect('/admin/missions')
 }
+
+export async function createMission(formData: FormData) {
+  const supabase = await createClient()
+  const name = formData.get('name') as string
+  const description = formData.get('description') as string
+  const target_category = formData.get('target_category') as string
+  const required_count = parseInt(formData.get('required_count') as string, 10)
+  const badge_name = formData.get('badge_name') as string
+  const badge_icon = formData.get('badge_icon') as string
+
+  // Must verify admin
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error("Unauthorized")
+
+  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+  if (profile?.role !== 'admin') throw new Error("Unauthorized")
+
+  const { error } = await supabase.from('missions').insert({
+    name,
+    description,
+    target_category: target_category || 'All',
+    required_count,
+    badge_name,
+    badge_icon: badge_icon || '🏆',
+    created_by: user.id
+  })
+
+  if (error) {
+    console.error('Error creating mission:', error)
+    redirect(`/admin/missions/new?error=${encodeURIComponent(error.message)}`)
+  }
+
+  revalidatePath('/admin/missions')
+  redirect('/admin/missions')
+}

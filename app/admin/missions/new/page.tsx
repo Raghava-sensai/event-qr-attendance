@@ -1,8 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { createMission } from '@/app/actions/missions'
 import Link from 'next/link'
 
-export default async function NewMissionPage() {
+export default async function NewMissionPage({ searchParams }: { searchParams: { error?: string } }) {
   const supabase = await createClient()
 
   // Get unique categories currently used in events to populate suggestions
@@ -11,40 +11,6 @@ export default async function NewMissionPage() {
     .select('category')
   
   const uniqueCategories = Array.from(new Set(categoriesData?.map(c => c.category) || [])).filter(Boolean)
-
-  async function createMission(formData: FormData) {
-    'use server'
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      redirect('/login')
-    }
-
-    const name = formData.get('name') as string
-    const description = formData.get('description') as string
-    const target_category = formData.get('target_category') as string
-    const required_count = parseInt(formData.get('required_count') as string, 10)
-    const badge_name = formData.get('badge_name') as string
-    const badge_icon = formData.get('badge_icon') as string
-
-    const { error } = await supabase.from('missions').insert({
-      name,
-      description,
-      target_category: target_category || 'All',
-      required_count,
-      badge_name,
-      badge_icon: badge_icon || '🏆',
-      created_by: user.id
-    })
-
-    if (error) {
-      console.error('Error creating mission:', error)
-      redirect('/admin/missions/new?error=1')
-    }
-
-    redirect('/admin/missions')
-  }
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -60,6 +26,12 @@ export default async function NewMissionPage() {
           <p className="mt-1 text-sm leading-6 text-[#827893]">
             Define a challenge for students to complete by attending events.
           </p>
+
+          {searchParams.error && (
+            <div className="mt-4 p-4 bg-red-50 text-red-700 text-sm rounded-xl border border-red-200">
+              <strong>Error:</strong> {searchParams.error}
+            </div>
+          )}
 
           <form action={createMission} className="mt-8 space-y-6">
             <div className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
