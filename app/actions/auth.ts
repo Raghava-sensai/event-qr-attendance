@@ -76,6 +76,11 @@ export async function register(formData: FormData) {
   // Wait a small moment to ensure session is fully established before redirecting
   await new Promise(resolve => setTimeout(resolve, 500))
 
+  // If session is null after signup, it means Supabase Email Confirmation is enabled
+  if (!data.session) {
+    return redirect(`/login?message=${encodeURIComponent('Account created! Please check your email to verify your account before logging in.')}`)
+  }
+
   redirect(nextUrl)
 }
 

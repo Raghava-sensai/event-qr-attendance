@@ -5,9 +5,9 @@ import { SubmitButton } from '@/components/SubmitButton'
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; next?: string }>
+  searchParams: Promise<{ error?: string; message?: string; next?: string }>
 }) {
-  const { error, next } = await searchParams
+  const { error, message, next } = await searchParams
   const nextUrl = next || '/dashboard'
 
   return (
@@ -30,6 +30,12 @@ export default async function LoginPage({
           {error && (
             <div className="rounded-2xl bg-red-50 p-4 text-sm text-red-700">
               {error}
+            </div>
+          )}
+
+          {message && (
+            <div className="rounded-2xl bg-green-50 p-4 text-sm text-green-700 border border-green-200">
+              {message}
             </div>
           )}
 
