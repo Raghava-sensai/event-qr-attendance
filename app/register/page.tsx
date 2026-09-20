@@ -1,6 +1,6 @@
 import { register } from '@/app/actions/auth'
 import Link from 'next/link'
-import { useFormStatus } from 'react-dom'
+import { SubmitButton } from '@/components/SubmitButton'
 
 const AVATARS = ['🦊', '🐼', '🐸', '🦄', '🦖', '👻', '🤖', '🐙']
 
@@ -88,23 +88,11 @@ export default async function RegisterPage({
             </div>
           </div>
 
-          <SubmitButton />
+          <div>
+            <SubmitButton>Create Account</SubmitButton>
+          </div>
         </form>
       </div>
     </div>
-  )
-}
-
-// Extract button to use form status for loading state
-function SubmitButton() {
-  const { pending } = useFormStatus()
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="flex w-full justify-center rounded-2xl bg-[#EBE0F8] px-3 py-3 text-sm font-bold leading-6 text-[#9D63D0] shadow-sm hover:bg-[#E0D0F5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E5C1FA] transition-colors active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-    >
-      {pending ? 'Creating Account...' : 'Create Account'}
-    </button>
   )
 }
