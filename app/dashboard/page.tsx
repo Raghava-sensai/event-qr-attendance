@@ -196,13 +196,21 @@ export default async function DashboardPage() {
               </p>
             </div>
           </div>
-          <Link 
-            href="/dashboard/scan"
-            className="w-full bg-[#FFD1C1] hover:bg-[#FFB7B2] transition-colors text-[#D49A89] rounded-2xl py-3.5 flex items-center justify-center font-bold text-sm gap-2"
-          >
-            <Camera className="w-4 h-4" />
-            Scan the Whisker Wall code
-          </Link>
+          <div className="flex flex-col gap-3 w-full">
+            <Link 
+              href="/dashboard/scan"
+              className="w-full bg-[#FFD1C1] hover:bg-[#FFB7B2] transition-colors text-white rounded-2xl py-3.5 flex items-center justify-center font-bold text-sm gap-2"
+            >
+              <Camera className="w-4 h-4" />
+              Scan the Whisker Wall code
+            </Link>
+            <Link 
+              href="/dashboard/review"
+              className="w-full bg-[#FFF9F5] hover:bg-[#F2E8DF] transition-colors text-[#D49A89] rounded-2xl py-3.5 flex items-center justify-center font-bold text-sm gap-2"
+            >
+              Leave a Review
+            </Link>
+          </div>
         </div>
 
       </div>

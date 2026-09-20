@@ -32,7 +32,16 @@ export default async function AdminDashboard() {
             A list of all events and their attendance statistics.
           </p>
         </div>
-        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none flex gap-3">
+        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none flex flex-wrap gap-3">
+          <Link
+            href="/admin/settings"
+            className="block rounded-2xl bg-[#FFFDF9] px-4 py-2 text-center text-sm font-bold text-[#A39189] shadow-sm ring-1 ring-inset ring-[#F2E8DF] hover:bg-[#FFF9F5]"
+            title="Configure the global admin Gmail for reviews"
+          >
+            <span className="flex items-center">
+              Global Settings
+            </span>
+          </Link>
           <Link
             href="/admin/missions"
             className="block rounded-2xl bg-white px-4 py-2 text-center text-sm font-bold text-[#7A6A64] shadow-sm ring-1 ring-inset ring-[#F2E8DF] hover:bg-[#FFF9F5]"
