@@ -157,13 +157,13 @@ export default async function EditEventPage({
                 </div>
               </div>
 
-              <div className="sm:col-span-2">
+              <div>
                 <label htmlFor="status" className="block text-sm font-medium leading-6 text-[#3B2D4A]">Status</label>
                 <div className="mt-2">
                   <select name="status" id="status" defaultValue={event.status} className="block w-full rounded-2xl border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-[#EBE0F8] focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6">
                     <option value="upcoming">Upcoming</option>
                     <option value="active">Active</option>
-                    <option value="ended">Ended</option>
+                    <option value="completed">Completed</option>
                   </select>
                 </div>
               </div>
