@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { CheckCircle, AlertCircle, Info, Calendar, Trophy } from 'lucide-react'
 import Link from 'next/link'
+import { MissionPopup } from '@/components/MissionPopup'
+import { UnlockPopup } from '@/components/UnlockPopup'
 
 export default async function EventScanPage({
   params
@@ -150,31 +152,11 @@ export default async function EventScanPage({
             <h2 className="text-2xl font-bold text-[#3B2D4A] mb-2">✓ Check-in Complete</h2>
             
             {unlockedMilestone && (
-              <div className="mt-6 mb-2 bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-200 rounded-[2rem] p-4 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
-                <div className="flex justify-center mb-2">
-                  {unlockedMilestone.badge_icon?.startsWith('http') ? (
-                    <img src={unlockedMilestone.badge_icon} alt="Badge" className="h-16 w-16 object-contain animate-bounce" />
-                  ) : (
-                    <span className="text-4xl animate-bounce">{unlockedMilestone.badge_icon}</span>
-                  )}
-                </div>
-                <h3 className="text-lg font-bold text-yellow-800">Mission Accomplished!</h3>
-                <p className="font-semibold text-yellow-900 text-xl my-1">{unlockedMilestone.badge_name}</p>
-                <p className="text-sm text-yellow-700">{unlockedMilestone.description}</p>
-              </div>
+              <MissionPopup mission={unlockedMilestone} />
             )}
 
             {newlyUnlockedEvents.length > 0 && (
-              <div className="mt-4 mb-2 bg-gradient-to-r from-purple-50 to-fuchsia-50 border border-purple-200 rounded-[2rem] p-4 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
-                <div className="flex justify-center mb-2">
-                  <span className="text-4xl animate-bounce">🔮</span>
-                </div>
-                <h3 className="text-lg font-bold text-purple-800">Secret Stage Unlocked!</h3>
-                {newlyUnlockedEvents.map((evt) => (
-                  <p key={evt.id} className="font-semibold text-purple-900 text-lg my-1">{evt.title}</p>
-                ))}
-                <p className="text-sm text-purple-700">Return to your dashboard to view your new events.</p>
-              </div>
+              <UnlockPopup unlockedEvents={newlyUnlockedEvents} />
             )}
           </>
         )}
