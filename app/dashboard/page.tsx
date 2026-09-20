@@ -34,9 +34,9 @@ export default async function DashboardPage() {
     .select('id, event_id, events(title)')
     .eq('user_id', user.id)
 
-  // Calculate Aura XP (just counting how many stages they visited)
+  // Calculate Aura XP (counting ALL event check-ins)
   const timelineEvents = allEvents?.filter(e => e.stage_label) || []
-  const auraXP = attendances?.filter(a => timelineEvents.some(e => e.id === a.event_id)).length || 0
+  const auraXP = attendances?.length || 0
   const totalStations = timelineEvents.length > 0 ? timelineEvents.length : 4
 
   return (
@@ -44,7 +44,10 @@ export default async function DashboardPage() {
       <div className="max-w-md mx-auto px-6 py-8">
         
         {/* Header Section */}
-        <div className="flex justify-between items-start mb-8">
+        <div 
+          className="flex justify-between items-start mb-8 cursor-help"
+          title="Student Dashboard: This is where participants see their Aura XP progress and upcoming journey stages based on their QR check-ins."
+        >
           <div>
             <div className="flex items-center gap-3 mb-1">
               <div className="text-[10px] font-bold text-[#D49A89] tracking-widest uppercase">
@@ -65,7 +68,10 @@ export default async function DashboardPage() {
         </div>
 
         {/* Aura XP Card */}
-        <div className="bg-white rounded-[2rem] shadow-sm p-8 mb-10 flex flex-col items-center border border-[#F2E8DF]">
+        <div 
+          className="bg-white rounded-[2rem] shadow-sm p-8 mb-10 flex flex-col items-center border border-[#F2E8DF] cursor-help"
+          title="Aura XP Tracking: Every time you scan an event QR code, you gain 1 Aura XP. Watch the ring fill up as you visit more stations!"
+        >
           
           {/* Progress Ring */}
           <div className="relative w-40 h-40 mb-6">

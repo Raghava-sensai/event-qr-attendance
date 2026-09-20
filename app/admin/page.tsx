@@ -21,7 +21,10 @@ export default async function AdminDashboard() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="sm:flex sm:items-center">
+      <div 
+        className="sm:flex sm:items-center cursor-help"
+        title="Admin Dashboard: Here you can view all event QR codes, check who has scanned them, and set up Badge Rules."
+      >
         <div className="sm:flex-auto">
           <div className="text-[10px] font-bold text-[#D49A89] tracking-widest mb-1 uppercase">SAGA × AURELIA</div>
           <h1 className="text-2xl font-extrabold leading-6 text-[#7A6A64]">Attendance Admin</h1>
@@ -33,12 +36,14 @@ export default async function AdminDashboard() {
           <Link
             href="/admin/missions"
             className="block rounded-2xl bg-white px-4 py-2 text-center text-sm font-bold text-[#7A6A64] shadow-sm ring-1 ring-inset ring-[#F2E8DF] hover:bg-[#FFF9F5]"
+            title="Configure how many Aura XP points or category check-ins are required to unlock Badges"
           >
-            Manage Missions
+            Manage Badge Rules
           </Link>
           <Link
             href="/admin/events/new"
             className="block rounded-2xl bg-[#FFE5D9] px-4 py-2 text-center text-sm font-bold text-[#D49A89] shadow-sm hover:bg-[#FFD1C1]"
+            title="Create a new event/station to generate a new QR Code for users to scan"
           >
             <span className="flex items-center">
               <Plus className="mr-1 h-4 w-4" />
