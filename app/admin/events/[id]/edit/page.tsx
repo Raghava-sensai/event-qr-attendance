@@ -150,6 +150,13 @@ export default async function EditEventPage({
                 </div>
               </div>
 
+              <div>
+                <label htmlFor="unlock_xp" className="block text-sm font-medium leading-6 text-[#3B2D4A]">Required XP to Unlock</label>
+                <div className="mt-2">
+                  <input type="number" name="unlock_xp" id="unlock_xp" defaultValue={event.unlock_xp || 0} className="block w-full rounded-2xl border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#EBE0F8] focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6" />
+                </div>
+              </div>
+
               <div className="sm:col-span-2">
                 <label htmlFor="status" className="block text-sm font-medium leading-6 text-[#3B2D4A]">Status</label>
                 <div className="mt-2">

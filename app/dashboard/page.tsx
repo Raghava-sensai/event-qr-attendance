@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Camera, RefreshCw, Home, Gift, Sparkles, QrCode } from 'lucide-react'
 import { LiveClock } from '@/components/LiveClock'
+import { UnlockPopup } from '@/components/UnlockPopup'
 
 // Dashboard dynamically generates stages from events
 
@@ -25,7 +26,7 @@ export default async function DashboardPage() {
   // Fetch all events to generate the timeline
   const { data: allEvents } = await supabase
     .from('events')
-    .select('id, title, description, stage_label, tags, status, xp_value')
+    .select('id, title, description, stage_label, tags, status, xp_value, unlock_xp')
     .order('event_date', { ascending: true })
 
   // Fetch attendances to calculate Aura XP
@@ -41,13 +42,23 @@ export default async function DashboardPage() {
     auraXP += (a.events?.xp_value) || 1
   })
 
-  // Show only events the user has actually attended
+  // Show events the user has actually attended, PLUS events they unlocked but haven't attended yet
   const attendedEventIds = attendances?.map(a => a.event_id) || []
-  const timelineEvents = allEvents?.filter(e => attendedEventIds.includes(e.id)) || []
+  const timelineEvents = allEvents?.filter(e => {
+    if (attendedEventIds.includes(e.id)) return true
+    if (e.unlock_xp > 0 && auraXP >= e.unlock_xp) return true
+    return false
+  }) || []
+
+  // Identify unlocked events for the popup
+  const newlyUnlockedEvents = allEvents?.filter(e => e.unlock_xp > 0 && auraXP >= e.unlock_xp && !attendedEventIds.includes(e.id)) || []
 
   return (
     <div className="min-h-screen bg-[#F9F8FF] text-[#3B2D4A] pb-32 font-sans relative">
       <div className="max-w-md mx-auto px-6 py-8">
+        
+        {/* Unlock Popup (Client Component) */}
+        <UnlockPopup unlockedEvents={newlyUnlockedEvents} />
         
         {/* Header Section */}
         <div 
@@ -148,23 +159,23 @@ export default async function DashboardPage() {
               }
 
               return timelineEvents.map((stage, i) => {
-                const done = true // Since we only show attended events
+                const done = attendedEventIds.includes(stage.id)
                 // Split comma separated tags into array
                 const pills = stage.tags ? stage.tags.split(',').map((t: string) => t.trim()).filter(Boolean) : []
                 
                 return (
                   <div key={stage.id} className="relative">
                     {/* Timeline Dot */}
-                    <div className={`absolute -left-[29px] top-4 w-3 h-3 rounded-full border-2 border-white bg-[#E5C1FA]`}></div>
+                    <div className={`absolute -left-[29px] top-4 w-3 h-3 rounded-full border-2 border-white ${done ? 'bg-[#E5C1FA]' : 'bg-[#EBE0F8]'}`}></div>
                     
                     {/* Stage Card */}
                     <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-[#EBE0F8]">
                       <div className="flex justify-between items-start mb-2">
                         <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest uppercase">
-                          {stage.stage_label || 'Unlocked Stage!'}
+                          {stage.stage_label || (done ? 'Stage Complete!' : 'Secret Stage Unlocked!')}
                         </div>
-                        <div className="text-[10px] font-bold px-3 py-1 rounded-full bg-[#D1F2D1] text-[#2E7D32]">
-                          Done (+{stage.xp_value || 1} XP)
+                        <div className={`text-[10px] font-bold px-3 py-1 rounded-full ${done ? 'bg-[#D1F2D1] text-[#2E7D32]' : 'bg-[#F5F4F8] text-[#9D63D0]'}`}>
+                          {done ? `Done (+${stage.xp_value || 1} XP)` : 'To do'}
                         </div>
                       </div>
                       <h4 className="text-xl font-extrabold text-[#3B2D4A] mb-2">{stage.title}</h4>

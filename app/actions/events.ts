@@ -16,7 +16,8 @@ export async function createEvent(formData: FormData) {
   const status = formData.get('status') as string || 'upcoming'
   const category = formData.get('category') as string || 'General'
   const stage_label = formData.get('stage_label') as string
-  const xp_value = parseInt(formData.get('xp_value') as string) || 1 || ''
+  const xp_value = parseInt(formData.get('xp_value') as string) || 1
+  const unlock_xp = parseInt(formData.get('unlock_xp') as string) || 0
   const tags = formData.get('tags') as string || ''
 
   const eventDate = new Date(`${dateStr}T${timeStr}:00`).toISOString()
@@ -29,7 +30,9 @@ export async function createEvent(formData: FormData) {
     status,
     category,
     stage_label,
-    tags
+    tags,
+    xp_value,
+    unlock_xp
   }).select('id').single()
 
   if (error) {
@@ -54,7 +57,8 @@ export async function updateEvent(formData: FormData) {
   const status = formData.get('status') as string || 'upcoming'
   const category = formData.get('category') as string || 'General'
   const stage_label = formData.get('stage_label') as string
-  const xp_value = parseInt(formData.get('xp_value') as string) || 1 || ''
+  const xp_value = parseInt(formData.get('xp_value') as string) || 1
+  const unlock_xp = parseInt(formData.get('unlock_xp') as string) || 0
   const tags = formData.get('tags') as string || ''
 
   const eventDate = new Date(`${dateStr}T${timeStr}:00`).toISOString()
@@ -66,6 +70,8 @@ export async function updateEvent(formData: FormData) {
     status,
     category,
     stage_label,
+    xp_value,
+    unlock_xp,
     tags
   }).eq('id', id)
 
