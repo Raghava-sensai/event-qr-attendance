@@ -1,6 +1,6 @@
 import { register } from '@/app/actions/auth'
 import Link from 'next/link'
-import { SubmitButton } from '@/components/SubmitButton'
+import { useFormStatus } from 'react-dom'
 
 const AVATARS = ['🦊', '🐼', '🐸', '🦄', '🦖', '👻', '🤖', '🐙']
 
@@ -49,7 +49,7 @@ export default async function RegisterPage({
             </div>
           </div>
 
-          <div className="space-y-4 rounded-2xl shadow-sm">
+          <div className="space-y-4">
             <div>
               <label htmlFor="username" className="sr-only">Username</label>
               <input
@@ -58,7 +58,7 @@ export default async function RegisterPage({
                 type="text"
                 autoComplete="username"
                 required
-                className="relative block w-full rounded-2xl border-0 py-1.5 text-[#3B2D4A] ring-1 ring-inset ring-[#EBE0F8] placeholder:text-[#827893] focus:z-10 focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6 px-3"
+                className="relative block w-full rounded-2xl border-0 py-2.5 text-[#3B2D4A] ring-1 ring-inset ring-[#EBE0F8] placeholder:text-[#827893] focus:z-10 focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6 px-4"
                 placeholder="Username"
               />
             </div>
@@ -70,7 +70,7 @@ export default async function RegisterPage({
                 type="email"
                 autoComplete="email"
                 required
-                className="relative block w-full rounded-2xl border-0 py-1.5 text-[#3B2D4A] ring-1 ring-inset ring-[#EBE0F8] placeholder:text-[#827893] focus:z-10 focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6 px-3"
+                className="relative block w-full rounded-2xl border-0 py-2.5 text-[#3B2D4A] ring-1 ring-inset ring-[#EBE0F8] placeholder:text-[#827893] focus:z-10 focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6 px-4"
                 placeholder="Email address"
               />
             </div>
@@ -82,20 +82,29 @@ export default async function RegisterPage({
                 type="password"
                 autoComplete="new-password"
                 required
-                minLength={6}
-                className="relative block w-full rounded-2xl border-0 py-1.5 text-[#3B2D4A] ring-1 ring-inset ring-[#EBE0F8] placeholder:text-[#827893] focus:z-10 focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6 px-3"
+                className="relative block w-full rounded-2xl border-0 py-2.5 text-[#3B2D4A] ring-1 ring-inset ring-[#EBE0F8] placeholder:text-[#827893] focus:z-10 focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6 px-4"
                 placeholder="Password (min 6 characters)"
               />
             </div>
           </div>
 
-          <div>
-            <SubmitButton>
-              Create Account
-            </SubmitButton>
-          </div>
+          <SubmitButton />
         </form>
       </div>
     </div>
+  )
+}
+
+// Extract button to use form status for loading state
+function SubmitButton() {
+  const { pending } = useFormStatus()
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="flex w-full justify-center rounded-2xl bg-[#EBE0F8] px-3 py-3 text-sm font-bold leading-6 text-[#9D63D0] shadow-sm hover:bg-[#E0D0F5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E5C1FA] transition-colors active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      {pending ? 'Creating Account...' : 'Create Account'}
+    </button>
   )
 }

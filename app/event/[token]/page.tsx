@@ -56,6 +56,7 @@ export default async function EventScanPage({
   // 4. Try to insert attendance (or check if already completed)
   let status: 'success' | 'duplicate' | 'error' = 'success'
   let attendanceTime = new Date()
+  let insertErrorMsg = ''
 
   // First check if already attended
   const { data: existingAttendance } = await supabase
@@ -84,6 +85,7 @@ export default async function EventScanPage({
         status = 'duplicate'
       } else {
         status = 'error'
+        insertErrorMsg = insertError.message || insertError.code || 'Unknown database error'
         console.error('Failed to mark attendance', insertError)
       }
     } else if (newAttendance) {
@@ -159,7 +161,8 @@ export default async function EventScanPage({
           <>
             <AlertCircle className="mx-auto h-16 w-16 text-red-500 mb-4" />
             <h2 className="text-2xl font-bold text-[#3B2D4A] mb-2">An Error Occurred</h2>
-            <p className="text-[#827893] mb-2">We could not record your participation. Please try again.</p>
+            <p className="text-[#827893] mb-2">We could not record your participation.</p>
+            <p className="text-xs text-red-400 bg-red-50 p-2 rounded-lg break-all">Error: {insertErrorMsg}</p>
           </>
         )}
 
