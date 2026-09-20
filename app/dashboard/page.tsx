@@ -31,12 +31,17 @@ export default async function DashboardPage() {
   // Fetch attendances to calculate Aura XP
   const { data: attendances } = await supabase
     .from('attendances')
-    .select('id, event_id, events(title)')
+    .select('id, event_id, events(title, xp_value)')
     .eq('user_id', user.id)
 
-  // Calculate Aura XP (counting ALL event check-ins)
+  // Calculate Aura XP (summing up the xp_value of ALL event check-ins)
+  let auraXP = 0
+  attendances?.forEach(a => {
+    // @ts-expect-error dynamic join
+    auraXP += (a.events?.xp_value) || 1
+  })
+
   const timelineEvents = allEvents?.filter(e => e.stage_label) || []
-  const auraXP = attendances?.length || 0
   const totalStations = timelineEvents.length > 0 ? timelineEvents.length : 4
 
   return (
@@ -82,7 +87,7 @@ export default async function DashboardPage() {
                 cy="50"
                 r="40"
                 fill="transparent"
-                stroke="#EBE0F8"
+                stroke="#F3E5F5"
                 strokeWidth="8"
               />
               {/* Progress circle */}
@@ -93,7 +98,7 @@ export default async function DashboardPage() {
                 fill="transparent"
                 stroke="#E5C1FA"
                 strokeWidth="8"
-                strokeDasharray={`${(auraXP / totalStations) * 251.2} 251.2`}
+                strokeDasharray={`${Math.min(auraXP / 20, 1) * 251.2} 251.2`}
                 strokeLinecap="round"
                 className="transition-all duration-1000 ease-out"
               />
@@ -105,7 +110,7 @@ export default async function DashboardPage() {
           </div>
 
           <h2 className="text-lg font-bold text-[#3B2D4A] mb-1">Let your aura glow!</h2>
-          <p className="text-sm text-[#827893] mb-8">{auraXP} of {totalStations} stations visited</p>
+          <p className="text-sm text-[#827893] mb-8">Reach 20 XP to maximize your Aura!</p>
 
           <div className="flex w-full gap-3">
             <Link 

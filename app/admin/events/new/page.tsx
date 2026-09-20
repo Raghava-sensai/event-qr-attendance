@@ -103,7 +103,7 @@ export default function NewEventPage() {
               </div>
             </div>
             
-            <div className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-3">
               <div>
                 <label htmlFor="category" className="block text-sm font-medium leading-6 text-[#3B2D4A]">Category</label>
                 <div className="mt-2">
@@ -120,6 +120,21 @@ export default function NewEventPage() {
                   </select>
                 </div>
               </div>
+
+            <div>
+              <label htmlFor="xp_value" className="block text-sm font-medium leading-6 text-[#3B2D4A]">
+                XP Value (Aura Points)
+              </label>
+              <div className="mt-2">
+                <input
+                  type="number"
+                  name="xp_value"
+                  id="xp_value"
+                  defaultValue="5"
+                  className="block w-full rounded-2xl border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#EBE0F8] placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#E5C1FA] sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
 
               <div>
                 <label htmlFor="status" className="block text-sm font-medium leading-6 text-[#3B2D4A]">Initial Status</label>

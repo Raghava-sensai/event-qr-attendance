@@ -15,7 +15,8 @@ export async function createEvent(formData: FormData) {
   const timeStr = formData.get('time') as string
   const status = formData.get('status') as string || 'upcoming'
   const category = formData.get('category') as string || 'General'
-  const stage_label = formData.get('stage_label') as string || ''
+  const stage_label = formData.get('stage_label') as string
+  const xp_value = parseInt(formData.get('xp_value') as string) || 1 || ''
   const tags = formData.get('tags') as string || ''
 
   const eventDate = new Date(`${dateStr}T${timeStr}:00`).toISOString()
@@ -52,7 +53,8 @@ export async function updateEvent(formData: FormData) {
   const timeStr = formData.get('time') as string
   const status = formData.get('status') as string || 'upcoming'
   const category = formData.get('category') as string || 'General'
-  const stage_label = formData.get('stage_label') as string || ''
+  const stage_label = formData.get('stage_label') as string
+  const xp_value = parseInt(formData.get('xp_value') as string) || 1 || ''
   const tags = formData.get('tags') as string || ''
 
   const eventDate = new Date(`${dateStr}T${timeStr}:00`).toISOString()
