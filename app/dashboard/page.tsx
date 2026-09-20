@@ -1,6 +1,31 @@
 import { createClient } from '@/lib/supabase/server'
-import { Calendar, CheckCircle, QrCode, Trophy, Target, Award } from 'lucide-react'
 import Link from 'next/link'
+import { Camera, RefreshCw, Home, Gift, Sparkles, QrCode } from 'lucide-react'
+
+// Hardcoded Aurelia Fest Stages to perfectly match the UI request
+const AURELIA_STAGES = [
+  {
+    id: 'stage-1',
+    label: 'STAGE 1 · FEEL',
+    title: 'The Prism Studio',
+    desc: 'Let colour do the talking. Paint with your eyes closed and your heart open.',
+    pills: ['Face Paint', 'Blindfolded Art']
+  },
+  {
+    id: 'stage-2',
+    label: 'STAGE 2 · FLOW',
+    title: 'The Connection Nook',
+    desc: 'Slow hands, quiet mind. Make something small with someone new.',
+    pills: ['Pipe-Cleaner Crafts', 'Memory Jar', 'Line Art']
+  },
+  {
+    id: 'stage-3',
+    label: 'STAGE 3 · FLOURISH',
+    title: 'The Keepsake Vault',
+    desc: 'Carry the calm home. Trade your Aura XP for a keepsake.',
+    pills: ['Rewards & Souvenirs']
+  }
+]
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -10,286 +35,204 @@ export default async function DashboardPage() {
     return null
   }
 
-  // Get user's profile
+  // Get user's profile for initials/avatar
   const { data: profile } = await supabase
     .from('profiles')
     .select('username, avatar')
     .eq('id', user.id)
     .single()
 
-  // Get all active and upcoming events
-  const { data: allEvents, error: eventsError } = await supabase
-    .from('events')
-    .select('id, title, description, event_date, status, category')
-    .in('status', ['active', 'upcoming'])
-    .order('event_date', { ascending: true })
+  const initials = profile?.username?.substring(0, 2).toUpperCase() || 'AQ'
 
-  // Get participated events
+  // Fetch attendances to calculate Aura XP
+  // For the sake of the Aurelia Fest demo, we'll just count total attendances
   const { data: attendances } = await supabase
     .from('attendances')
-    .select(`
-      id,
-      scanned_at,
-      event_id,
-      events (
-        id,
-        title,
-        description,
-        event_date,
-        status,
-        category
-      )
-    `)
+    .select('id, events(title)')
     .eq('user_id', user.id)
-    .order('scanned_at', { ascending: false })
 
-  // Get missions
-  const { data: missions } = await supabase
-    .from('missions')
-    .select('*')
-    .order('created_at', { ascending: true })
+  const auraXP = attendances?.length || 0
+  const totalStations = 4 // 3 stages + 1 photobooth
 
-  // Filter available events
-  const participatedEventIds = new Set(attendances?.map(a => a.event_id) || [])
-  const availableEvents = allEvents?.filter(e => !participatedEventIds.has(e.id)) || []
-
-  // Calculate mission progress
-  const userCategoryCounts: Record<string, number> = {}
-  let totalEvents = 0
-  
-  if (attendances) {
-    attendances.forEach(a => {
-      totalEvents++
-      // @ts-expect-error Types from Supabase join need casting
-      const category = a.events?.category || 'General'
-      userCategoryCounts[category] = (userCategoryCounts[category] || 0) + 1
-    })
-  }
-
-  type MissionProgress = {
-    id: string
-    name: string
-    description: string
-    target_category: string
-    required_count: number
-    badge_name: string
-    badge_icon: string
-    currentProgress: number
-    percentage: number
-  }
-
-  const activeMissions: MissionProgress[] = []
-  const completedMissions: MissionProgress[] = []
-
-  if (missions) {
-    missions.forEach(mission => {
-      let progress = 0
-      if (mission.target_category === 'All') {
-        progress = totalEvents
-      } else {
-        progress = userCategoryCounts[mission.target_category] || 0
-      }
-
-      const isCompleted = progress >= mission.required_count
-      const missionData = {
-        ...mission,
-        currentProgress: Math.min(progress, mission.required_count),
-        percentage: Math.min(100, (progress / mission.required_count) * 100)
-      }
-
-      if (isCompleted) {
-        completedMissions.push(missionData)
-      } else {
-        activeMissions.push(missionData)
-      }
+  // Helper to check if a stage is done based on event titles matching
+  // (In a real app, we'd match exact event IDs)
+  const isStageDone = (stageTitle: string) => {
+    return attendances?.some(a => {
+      // @ts-expect-error join type
+      const t = a.events?.title || ''
+      return t.toLowerCase().includes(stageTitle.toLowerCase())
     })
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
-      <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
-        <div className="flex items-center gap-4">
-          <div className="text-5xl bg-white shadow-sm p-3 rounded-full border border-gray-100">
-            {profile?.avatar || '🦊'}
-          </div>
+    <div className="min-h-screen bg-[#F9F8FF] text-[#3B2D4A] pb-32 font-sans relative">
+      <div className="max-w-md mx-auto px-6 py-8">
+        
+        {/* Header Section */}
+        <div className="flex justify-between items-start mb-8">
           <div>
-            <h1 className="text-2xl font-semibold leading-6 text-gray-900">Welcome, {profile?.username || 'Student'}!</h1>
-            <p className="mt-2 text-sm text-gray-700">
-              Check in to events and complete missions to earn badges.
+            <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest mb-1 uppercase">
+              SAGA × AURELIA
+            </div>
+            <h1 className="text-2xl font-extrabold text-[#3B2D4A] tracking-tight leading-tight">
+              Welcome to Aurelia Fest!
+            </h1>
+            <p className="text-sm text-[#827893] mt-1">
+              Feel · Flow · Flourish
             </p>
           </div>
+          <div className="w-12 h-12 rounded-full bg-[#E5B5F5] text-white flex items-center justify-center font-bold text-lg shadow-sm">
+            {profile?.avatar === '🦊' ? initials : profile?.avatar || initials}
+          </div>
         </div>
-        <Link 
-          href="/dashboard/scan" 
-          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-500 transition-colors shadow-sm"
-        >
-          <QrCode className="h-5 w-5" />
-          Scan QR
-        </Link>
+
+        {/* Aura XP Card */}
+        <div className="bg-white rounded-[2rem] shadow-sm p-8 mb-10 flex flex-col items-center">
+          
+          {/* Progress Ring */}
+          <div className="relative w-40 h-40 mb-6">
+            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+              {/* Background circle */}
+              <circle
+                cx="50"
+                cy="50"
+                r="40"
+                fill="transparent"
+                stroke="#F3E5F5"
+                strokeWidth="8"
+              />
+              {/* Progress circle */}
+              <circle
+                cx="50"
+                cy="50"
+                r="40"
+                fill="transparent"
+                stroke="#E5C1FA"
+                strokeWidth="8"
+                strokeDasharray={`${(auraXP / totalStations) * 251.2} 251.2`}
+                strokeLinecap="round"
+                className="transition-all duration-1000 ease-out"
+              />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="text-5xl font-extrabold text-[#3B2D4A]">{auraXP}</span>
+              <span className="text-[10px] font-bold text-[#827893] uppercase tracking-wide mt-1">Aura XP</span>
+            </div>
+          </div>
+
+          <h2 className="text-lg font-bold text-[#3B2D4A] mb-1">Let your aura glow!</h2>
+          <p className="text-sm text-[#827893] mb-8">{auraXP} of {totalStations} stations visited</p>
+
+          <div className="flex w-full gap-3">
+            <Link 
+              href="/dashboard/scan"
+              className="flex-1 bg-[#EBE0F8] hover:bg-[#E0D0F5] transition-colors text-[#9D63D0] rounded-2xl py-3 px-4 flex items-center justify-center font-bold text-sm gap-2"
+            >
+              <Sparkles className="w-4 h-4" />
+              Simulate Scan
+            </Link>
+            <button className="flex-1 bg-[#F5F4F8] hover:bg-[#EAE8F0] transition-colors text-[#827893] rounded-2xl py-3 px-4 flex items-center justify-center font-bold text-sm gap-2">
+              <RefreshCw className="w-4 h-4" />
+              Reset
+            </button>
+          </div>
+        </div>
+
+        {/* Your Journey Section */}
+        <div className="mb-6">
+          <h3 className="text-sm font-extrabold text-[#827893] tracking-widest uppercase mb-6 ml-2">
+            Your Journey
+          </h3>
+
+          <div className="relative pl-6 space-y-6">
+            {/* Vertical Timeline Line */}
+            <div className="absolute left-[11px] top-2 bottom-6 w-0.5 bg-[#EBE0F8]"></div>
+
+            {AURELIA_STAGES.map((stage, i) => {
+              const done = isStageDone(stage.title)
+              return (
+                <div key={stage.id} className="relative">
+                  {/* Timeline Dot */}
+                  <div className={`absolute -left-[29px] top-4 w-3 h-3 rounded-full border-2 border-white ${done ? 'bg-[#9D63D0]' : 'bg-[#EBE0F8]'}`}></div>
+                  
+                  {/* Stage Card */}
+                  <div className="bg-white rounded-[2rem] p-6 shadow-sm">
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="text-[10px] font-bold text-[#9D63D0] tracking-widest uppercase">
+                        {stage.label}
+                      </div>
+                      <div className={`text-[10px] font-bold px-3 py-1 rounded-full ${done ? 'bg-green-100 text-green-700' : 'bg-[#F3E5F5] text-[#9D63D0]'}`}>
+                        {done ? 'Done' : 'To do'}
+                      </div>
+                    </div>
+                    <h4 className="text-xl font-extrabold text-[#3B2D4A] mb-2">{stage.title}</h4>
+                    <p className="text-sm text-[#827893] leading-relaxed mb-4">
+                      {stage.desc}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {stage.pills.map(pill => (
+                        <span key={pill} className="bg-[#F5F4F8] text-[#827893] text-xs font-bold px-3 py-1.5 rounded-full">
+                          {pill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Whisker Wall Photobooth Card */}
+        <div className="bg-white rounded-[2rem] p-6 shadow-sm mt-8">
+          <div className="flex items-start gap-4 mb-6">
+            <div className="w-14 h-14 rounded-full bg-[#C7B9F1] flex items-center justify-center flex-shrink-0 text-2xl">
+              🐱
+            </div>
+            <div>
+              <h4 className="text-lg font-extrabold text-[#3B2D4A] mb-1 leading-tight">The Whisker Wall & Photobooth</h4>
+              <p className="text-sm text-[#827893] leading-relaxed">
+                Say hi to our hand-painted cat mascot, snap a photo, and leave a little review.
+              </p>
+            </div>
+          </div>
+          <Link 
+            href="/dashboard/scan"
+            className="w-full bg-[#EFCAFA] hover:bg-[#E5B5F5] transition-colors text-white rounded-2xl py-3.5 flex items-center justify-center font-bold text-sm gap-2"
+          >
+            <Camera className="w-4 h-4" />
+            Scan the Whisker Wall code
+          </Link>
+        </div>
+
       </div>
 
-      {/* Badges Section */}
-      {completedMissions.length > 0 && (
-        <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 overflow-hidden">
-          <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2 mb-4">
-            <Award className="h-5 w-5 text-yellow-500" />
-            My Badges
-          </h2>
-          <div className="flex flex-wrap gap-4">
-            {completedMissions.map(mission => (
-              <div key={mission.id} className="flex items-center gap-3 bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-200 px-4 py-3 rounded-lg shadow-sm">
-                <span className="text-3xl">{mission.badge_icon}</span>
-                <div>
-                  <div className="font-bold text-yellow-900 text-sm">{mission.badge_name}</div>
-                  <div className="text-xs text-yellow-700">{mission.name}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Active Missions Section */}
-      <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 overflow-hidden relative">
-        <div className="absolute top-0 right-0 p-32 bg-blue-50 rounded-full opacity-20 -mr-20 -mt-20 pointer-events-none"></div>
-        <div className="relative">
-          <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2 mb-6">
-            <Target className="h-5 w-5 text-blue-500" />
-            Active Missions
-          </h2>
+      {/* Floating Bottom Navigation */}
+      <div className="fixed bottom-6 left-0 right-0 flex justify-center px-6 pointer-events-none z-50">
+        <div className="bg-white rounded-full shadow-lg px-8 py-3 flex items-center justify-between w-full max-w-sm pointer-events-auto relative">
           
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {activeMissions.length > 0 ? (
-              activeMissions.map(mission => (
-                <div key={mission.id} className="bg-gray-50 border border-gray-100 rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-bold text-gray-900">{mission.name}</h3>
-                    <span className="text-2xl" title={`Reward: ${mission.badge_name}`}>{mission.badge_icon}</span>
-                  </div>
-                  <p className="text-xs text-gray-500 mb-4 h-8 line-clamp-2">{mission.description}</p>
-                  
-                  <div className="flex justify-between items-center text-xs font-medium text-gray-500 mb-1">
-                    <span>{mission.currentProgress} / {mission.required_count} Events</span>
-                    <span>{Math.round(mission.percentage)}%</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                    <div 
-                      className="bg-blue-600 h-2 rounded-full transition-all duration-1000 ease-out" 
-                      style={{ width: `${mission.percentage}%` }}
-                    ></div>
-                  </div>
-                  <div className="mt-3 inline-block px-2 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded">
-                    Category: {mission.target_category}
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="col-span-full py-8 text-center text-gray-500 italic">
-                {missions && missions.length > 0 ? "You've completed all active missions!" : "No missions available right now."}
-              </div>
-            )}
+          <button className="flex flex-col items-center gap-1 text-[#827893]">
+            <Home className="w-5 h-5" />
+            <span className="text-[10px] font-bold">Home</span>
+          </button>
+
+          {/* Center floating scan button */}
+          <div className="absolute left-1/2 -translate-x-1/2 -top-6">
+            <div className="w-16 h-16 bg-gradient-to-tr from-[#E1B1F5] to-[#BFA1F8] rounded-full shadow-md flex items-center justify-center border-4 border-[#F9F8FF]">
+              <Link href="/dashboard/scan">
+                <QrCode className="w-6 h-6 text-white" />
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
 
-      {/* Available Events Section */}
-      <section>
-        <h2 className="text-xl font-bold leading-6 text-gray-900 mb-6 flex items-center gap-2">
-          <span>🎫</span> Upcoming Club Events
-        </h2>
-        
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <ul role="list" className="divide-y divide-gray-200">
-            {availableEvents.length > 0 ? (
-              availableEvents.map((event) => (
-                <li key={event.id} className="px-6 py-6 sm:flex sm:items-center sm:justify-between hover:bg-gray-50 transition-colors">
-                  <div className="sm:flex sm:items-center sm:w-full">
-                    <div className="sm:flex-auto">
-                      <div className="flex items-center justify-between sm:justify-start gap-4">
-                        <h3 className="text-lg font-medium text-gray-900">
-                          {event.title}
-                        </h3>
-                        <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${
-                          event.status === 'active' ? 'bg-green-50 text-green-700 ring-green-600/20' : 'bg-blue-50 text-blue-700 ring-blue-600/20'
-                        }`}>
-                          {event.status.toUpperCase()}
-                        </span>
-                        <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-                          {event.category}
-                        </span>
-                      </div>
-                      <div className="mt-2 flex items-center text-sm text-gray-500">
-                        <Calendar className="mr-1.5 h-4 w-4 flex-shrink-0 text-gray-400" />
-                        {new Date(event.event_date).toLocaleDateString()}
-                      </div>
-                    </div>
-                    <div className="mt-4 sm:mt-0 sm:ml-4">
-                      <Link 
-                        href="/dashboard/scan"
-                        className="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm text-sm"
-                      >
-                        <QrCode className="h-4 w-4" />
-                        Scan QR
-                      </Link>
-                    </div>
-                  </div>
-                </li>
-              ))
-            ) : (
-              <li className="px-6 py-12 text-center text-gray-500">
-                No upcoming events available at the moment. Check back later!
-              </li>
-            )}
-          </ul>
-        </div>
-      </section>
+          <button className="flex flex-col items-center gap-1 text-[#827893]">
+            <Gift className="w-5 h-5" />
+            <span className="text-[10px] font-bold">Rewards</span>
+          </button>
 
-      {/* Participated Events Section */}
-      <section>
-        <h2 className="text-xl font-bold leading-6 text-gray-900 mb-6 flex items-center gap-2">
-          <span>✓</span> My Participated Events
-        </h2>
-        
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <ul role="list" className="divide-y divide-gray-200">
-            {attendances && attendances.length > 0 ? (
-              attendances.map((attendance) => (
-                <li key={attendance.id} className="px-6 py-6 sm:flex sm:items-center sm:justify-between">
-                  <div className="sm:flex sm:items-center sm:w-full">
-                    <div className="sm:flex-auto">
-                      <div className="flex items-center gap-3">
-                        <CheckCircle className="h-5 w-5 text-green-500" />
-                        <h3 className="text-lg font-medium text-gray-900">
-                          {/* @ts-expect-error Types from Supabase join need casting */}
-                          {attendance.events?.title}
-                        </h3>
-                        <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-                          {/* @ts-expect-error Types from Supabase join need casting */}
-                          {attendance.events?.category}
-                        </span>
-                      </div>
-                      <div className="mt-2 sm:flex sm:items-center gap-4">
-                        <div className="flex items-center text-sm text-gray-500">
-                          <Calendar className="mr-1.5 h-4 w-4 flex-shrink-0 text-gray-400" />
-                          {/* @ts-expect-error Types from Supabase join need casting */}
-                          {new Date(attendance.events?.event_date).toLocaleDateString()}
-                        </div>
-                        <div className="mt-2 sm:mt-0 flex items-center text-sm text-gray-500">
-                          Checked in: {new Date(attendance.scanned_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              ))
-            ) : (
-              <li className="px-6 py-12 text-center text-gray-500">
-                You haven't checked into any events yet. Scan a QR code to record your participation!
-              </li>
-            )}
-          </ul>
         </div>
-      </section>
+      </div>
+
     </div>
   )
 }
