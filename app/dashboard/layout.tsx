@@ -23,7 +23,7 @@ export default async function DashboardLayout({
   const isAdmin = profile?.role === 'admin'
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FFFDF9]">
       <Navbar isAdmin={isAdmin} />
       <main>
         {children}

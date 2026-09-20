@@ -50,36 +50,36 @@ export default async function AdminDashboard() {
 
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {events?.map((event) => (
-          <div key={event.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+          <div key={event.id} className="bg-white rounded-[2rem] shadow-sm border border-[#F2E8DF] overflow-hidden flex flex-col">
             <div className="p-6 flex-1">
               <div className="flex justify-between items-start">
-                <h3 className="text-lg font-medium text-gray-900 line-clamp-1">{event.title}</h3>
+                <h3 className="text-lg font-medium text-[#7A6A64] line-clamp-1">{event.title}</h3>
                 <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset ${
                   event.status === 'active' ? 'bg-green-50 text-green-700 ring-green-600/20' :
-                  event.status === 'ended' ? 'bg-gray-50 text-gray-600 ring-gray-500/10' :
+                  event.status === 'ended' ? 'bg-[#FFFDF9] text-[#A39189] ring-gray-500/10' :
                   'bg-yellow-50 text-yellow-800 ring-yellow-600/20'
                 }`}>
                   {event.status.toUpperCase()}
                 </span>
               </div>
-              <div className="mt-4 flex items-center text-sm text-gray-500">
-                <Calendar className="mr-1.5 h-4 w-4 flex-shrink-0 text-gray-400" />
+              <div className="mt-4 flex items-center text-sm text-[#A39189]">
+                <Calendar className="mr-1.5 h-4 w-4 flex-shrink-0 text-[#A39189]" />
                 {new Date(event.event_date).toLocaleDateString('en-US', {
                   day: 'numeric',
                   month: 'short',
                   year: 'numeric'
                 })}
               </div>
-              <div className="mt-2 flex items-center text-sm text-gray-500">
-                <Users className="mr-1.5 h-4 w-4 flex-shrink-0 text-gray-400" />
+              <div className="mt-2 flex items-center text-sm text-[#A39189]">
+                <Users className="mr-1.5 h-4 w-4 flex-shrink-0 text-[#A39189]" />
                 {event.attendances[0]?.count || 0} attendees
               </div>
             </div>
-            <div className="bg-gray-50 px-6 py-4 flex gap-4 border-t border-gray-100">
-              <Link href={`/admin/events/${event.id}`} className="text-sm font-medium text-blue-600 hover:text-blue-500">
+            <div className="bg-[#FFFDF9] px-6 py-4 flex gap-4 border-t border-[#F2E8DF]">
+              <Link href={`/admin/events/${event.id}`} className="text-sm font-medium text-[#D49A89] hover:text-[#D49A89]">
                 View Details
               </Link>
-              <Link href={`/admin/events/${event.id}?qr=true`} className="text-sm font-medium text-gray-600 hover:text-gray-900 flex items-center">
+              <Link href={`/admin/events/${event.id}?qr=true`} className="text-sm font-medium text-[#A39189] hover:text-[#7A6A64] flex items-center">
                 <QrCode className="mr-1 h-4 w-4" />
                 QR
               </Link>
@@ -88,7 +88,7 @@ export default async function AdminDashboard() {
         ))}
 
         {(!events || events.length === 0) && (
-          <div className="col-span-full py-12 text-center text-gray-500 bg-white rounded-xl border border-dashed border-gray-300">
+          <div className="col-span-full py-12 text-center text-[#A39189] bg-white rounded-[2rem] border border-dashed border-[#F2E8DF]">
             No events found. Create one to get started!
           </div>
         )}

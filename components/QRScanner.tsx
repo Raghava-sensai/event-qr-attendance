@@ -50,7 +50,7 @@ export default function QRScanner() {
   }, [router, scanResult])
 
   return (
-    <div className="w-full max-w-sm mx-auto overflow-hidden rounded-xl bg-white shadow-sm border border-gray-200">
+    <div className="w-full max-w-sm mx-auto overflow-hidden rounded-[2rem] bg-white shadow-sm border border-[#F2E8DF]">
       <div id="qr-reader" className="w-full"></div>
       {scanResult && (
         <div className="p-4 bg-green-50 text-green-700 text-center font-medium text-sm">

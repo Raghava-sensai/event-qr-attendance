@@ -27,7 +27,7 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FFFDF9]">
       <Navbar isAdmin={isAdmin} />
       <main>
         {children}

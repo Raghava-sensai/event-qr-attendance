@@ -192,7 +192,7 @@ export default async function DashboardPage() {
           </div>
           <Link 
             href="/dashboard/scan"
-            className="w-full bg-[#FFD1C1] hover:bg-[#FFB7B2] transition-colors text-white rounded-2xl py-3.5 flex items-center justify-center font-bold text-sm gap-2"
+            className="w-full bg-[#FFD1C1] hover:bg-[#FFB7B2] transition-colors text-[#D49A89] rounded-2xl py-3.5 flex items-center justify-center font-bold text-sm gap-2"
           >
             <Camera className="w-4 h-4" />
             Scan the Whisker Wall code
@@ -214,7 +214,7 @@ export default async function DashboardPage() {
           <div className="absolute left-1/2 -translate-x-1/2 -top-6">
             <div className="w-16 h-16 bg-gradient-to-tr from-[#FFD1C1] to-[#FFB7B2] rounded-full shadow-md flex items-center justify-center border-4 border-[#FFFDF9]">
               <Link href="/dashboard/scan">
-                <QrCode className="w-6 h-6 text-white" />
+                <QrCode className="w-6 h-6 text-[#D49A89]" />
               </Link>
             </div>
           </div>

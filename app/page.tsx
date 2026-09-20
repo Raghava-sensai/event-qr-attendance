@@ -3,21 +3,21 @@ import { QrCode, CheckCircle2, ShieldCheck, Zap } from 'lucide-react'
 
 export default function HomePage() {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-[#FFFDF9] min-h-screen">
       <header className="absolute inset-x-0 top-0 z-50">
         <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
             <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
-              <span className="sr-only">Club Event Platform</span>
-              <QrCode className="h-8 w-8 text-blue-600" />
-              <span className="font-bold text-xl tracking-tight text-gray-900">Club Event Platform</span>
+              <span className="sr-only">Aurelia Fest</span>
+              <QrCode className="h-8 w-8 text-[#D49A89]" />
+              <span className="font-bold text-xl tracking-tight text-[#7A6A64]">✨ SAGA × AURELIA</span>
             </Link>
           </div>
           <div className="flex flex-1 justify-end items-center gap-6">
-            <Link href="/login" className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors">
+            <Link href="/login" className="text-sm font-semibold leading-6 text-[#7A6A64] hover:text-[#D49A89] transition-colors">
               Log in
             </Link>
-            <Link href="/register" className="text-sm font-semibold leading-6 text-white bg-blue-600 hover:bg-blue-500 rounded-lg px-4 py-2 transition-colors">
+            <Link href="/register" className="text-sm font-semibold leading-6 text-[#D49A89] bg-[#FFE5D9] hover:bg-[#FFD1C1] rounded-lg px-4 py-2 transition-colors">
               Get Started
             </Link>
           </div>
@@ -31,20 +31,20 @@ export default function HomePage() {
         
         <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
           <div className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              University Club Event Platform
+            <h1 className="text-4xl font-bold tracking-tight text-[#7A6A64] sm:text-6xl">
+              Welcome to Aurelia Fest!
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              Modernize your student club with lightning-fast QR code check-ins. Track event participation, engage members, and automatically build progress towards club milestones and badges.
+            <p className="mt-6 text-lg leading-8 text-[#A39189]">
+              Feel · Flow · Flourish. Immerse yourself in the SAGA × AURELIA experience. Scan QR codes at each station, collect Aura XP, and flourish your journey.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link
                 href="/register"
-                className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors"
+                className="rounded-2xl bg-[#FFE5D9] px-3.5 py-2.5 text-sm font-semibold text-[#D49A89] shadow-sm hover:bg-[#FFD1C1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors"
               >
                 Create your account
               </Link>
-              <Link href="/login" className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors">
+              <Link href="/login" className="text-sm font-semibold leading-6 text-[#7A6A64] hover:text-[#D49A89] transition-colors">
                 Log in to dashboard <span aria-hidden="true">→</span>
               </Link>
             </div>
@@ -57,49 +57,49 @@ export default function HomePage() {
       </div>
 
       {/* Feature section */}
-      <div className="py-24 sm:py-32 bg-gray-50">
+      <div className="py-24 sm:py-32 bg-[#FFFDF9]">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base font-semibold leading-7 text-blue-600">Deploy faster</h2>
-            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-base font-semibold leading-7 text-[#D49A89]">Deploy faster</h2>
+            <p className="mt-2 text-3xl font-bold tracking-tight text-[#7A6A64] sm:text-4xl">
               Everything you need to run your event
             </p>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
+            <p className="mt-6 text-lg leading-8 text-[#A39189]">
               Say goodbye to messy clipboards and manual data entry. Our platform handles the heavy lifting so you can focus on your attendees.
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
             <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-3 lg:gap-y-16">
               <div className="relative pl-16">
-                <dt className="text-base font-semibold leading-7 text-gray-900">
-                  <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600">
-                    <Zap className="h-6 w-6 text-white" aria-hidden="true" />
+                <dt className="text-base font-semibold leading-7 text-[#7A6A64]">
+                  <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-[#FFE5D9]">
+                    <Zap className="h-6 w-6 text-[#D49A89]" aria-hidden="true" />
                   </div>
                   Instant Check-ins
                 </dt>
-                <dd className="mt-2 text-base leading-7 text-gray-600">
+                <dd className="mt-2 text-base leading-7 text-[#A39189]">
                   Participants just point their camera. No apps to download. Immediate check-in straight from their browser.
                 </dd>
               </div>
               <div className="relative pl-16">
-                <dt className="text-base font-semibold leading-7 text-gray-900">
-                  <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600">
-                    <ShieldCheck className="h-6 w-6 text-white" aria-hidden="true" />
+                <dt className="text-base font-semibold leading-7 text-[#7A6A64]">
+                  <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-[#FFE5D9]">
+                    <ShieldCheck className="h-6 w-6 text-[#D49A89]" aria-hidden="true" />
                   </div>
                   Duplicate Protection
                 </dt>
-                <dd className="mt-2 text-base leading-7 text-gray-600">
+                <dd className="mt-2 text-base leading-7 text-[#A39189]">
                   Strict database constraints ensure that a student can only be checked in exactly once per event.
                 </dd>
               </div>
               <div className="relative pl-16">
-                <dt className="text-base font-semibold leading-7 text-gray-900">
-                  <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600">
-                    <CheckCircle2 className="h-6 w-6 text-white" aria-hidden="true" />
+                <dt className="text-base font-semibold leading-7 text-[#7A6A64]">
+                  <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-[#FFE5D9]">
+                    <CheckCircle2 className="h-6 w-6 text-[#D49A89]" aria-hidden="true" />
                   </div>
                   Track Participation
                 </dt>
-                <dd className="mt-2 text-base leading-7 text-gray-600">
+                <dd className="mt-2 text-base leading-7 text-[#A39189]">
                   Watch your event participation numbers climb in real time with our powerful admin suite. Monitor student engagement easily.
                 </dd>
               </div>
