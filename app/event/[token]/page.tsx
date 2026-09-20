@@ -113,10 +113,9 @@ export default async function EventScanPage({
     if (allAttendances) {
       allAttendances.forEach(a => {
         totalEvents++
-        // @ts-expect-error join cast
-        const ev = a.events || {}
-        currentXP += ev.xp_value || 0
-        const category = ev.category || 'General'
+        const ev = a.events as any
+        currentXP += ev?.xp_value || 0
+        const category = ev?.category || 'General'
         categoryCounts[category] = (categoryCounts[category] || 0) + 1
       })
     }
