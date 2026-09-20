@@ -8,12 +8,12 @@ export function Navbar({ isAdmin }: { isAdmin: boolean }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <Link href="/dashboard" className="text-xl font-extrabold text-[#9D63D0] tracking-wider uppercase flex items-center gap-2">
-                <span className="text-2xl">✨</span> SAGA × AURELIA
+            <div className="flex shrink-0 items-center">
+              <Link href="/dashboard" className="text-xl font-black tracking-widest text-[#9D63D0] flex items-center gap-2">
+                <span className="text-2xl">✨</span> AURA QUEST
               </Link>
             </div>
-            <div className="hidden sm:ml-8 sm:flex sm:space-x-8">
+            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <Link
                 href="/dashboard"
                 className="border-transparent text-[#827893] hover:text-[#9D63D0] inline-flex items-center px-1 pt-1 border-b-2 hover:border-[#D49A89] text-sm font-bold transition-colors"
